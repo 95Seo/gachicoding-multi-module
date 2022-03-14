@@ -3,13 +3,15 @@ package org.deco.gachicoding.domain.user;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
-@NoArgsConstructor
+@DynamicInsert
 @Entity
+@NoArgsConstructor
 @Table(name = "user")
 public class User {
 
