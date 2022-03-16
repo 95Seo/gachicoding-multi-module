@@ -1,12 +1,14 @@
-package org.deco.gachicoding.service.impl;
+package org.deco.gachicoding.service.user.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.deco.gachicoding.domain.user.User;
 import org.deco.gachicoding.domain.user.UserRepository;
+import org.deco.gachicoding.domain.utils.email.ConfirmationToken;
 import org.deco.gachicoding.dto.user.UserResponseDto;
 import org.deco.gachicoding.dto.user.UserSaveRequestDto;
 import org.deco.gachicoding.dto.user.UserUpdateResponseDto;
-import org.deco.gachicoding.service.UserService;
+import org.deco.gachicoding.service.user.UserService;
+import org.deco.gachicoding.service.email.ConfirmationTokenService;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -16,6 +18,13 @@ import javax.transaction.Transactional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final ConfirmationTokenService confirmationTokenService;
+
+    @Transactional
+    @Override
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
 
     @Transactional
     @Override
@@ -30,9 +39,25 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public Long registerUser(UserSaveRequestDto dto) {
-
         System.out.println("User Save 수행");
-        return userRepository.save(dto.toEntity()).getIdx();
+        Long idx = userRepository.save(dto.toEntity()).getIdx();
+
+        // 이메일 인증 기능 분리 필요
+        confirmationTokenService.createEmailConfirmationToken(dto.getEmail());
+        return idx;
+    }
+
+    /**
+     * 이메일 인증 로직
+     * @param token
+     */
+    @Transactional
+    @Override
+    public void confirmEmail(String token) {
+        ConfirmationToken findConfirmationToken = confirmationTokenService.findByIdExpirationDateAfterAndExpired(token);
+        User findUserInfo = getUserByEmail(findConfirmationToken.getEmail());
+        findConfirmationToken.useToken();   // 토큰 만료 로직을 구현해주면 된다. ex) expired 값을 true 로 변경
+//        findUserInfo.emailVerifiedSuccess();    // 유저의 이메일 인증 값 변경 로직을 구현해 주면 된다. ex) emailVerified 값을 true로 변경
     }
 
     @Transactional
@@ -47,11 +72,10 @@ public class UserServiceImpl implements UserService {
         return idx;
     }
 
+    @Transactional
     @Override
     public Long deleteUser(Long idx) {
         userRepository.deleteById(idx);
         return idx;
     }
-
-
 }

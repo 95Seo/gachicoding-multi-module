@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.deco.gachicoding.dto.user.UserResponseDto;
 import org.deco.gachicoding.dto.user.UserSaveRequestDto;
 import org.deco.gachicoding.dto.user.UserUpdateResponseDto;
-import org.deco.gachicoding.service.UserService;
+import org.deco.gachicoding.service.user.UserService;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
