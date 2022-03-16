@@ -28,4 +28,9 @@ public class RestUserController {
     public Long updateUser(@PathVariable Long idx,@RequestBody UserUpdateResponseDto dto){
         return userService.updateUser(idx, dto);
     }
+
+    @DeleteMapping("/user/{idx}")
+    public Long deleteUser(@PathVariable Long idx){
+        return userService.deleteUser(idx);
+    }
 }

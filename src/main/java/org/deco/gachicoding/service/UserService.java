@@ -14,4 +14,6 @@ public interface UserService {
     Long registerUser(UserSaveRequestDto dto);
 
     Long updateUser(Long idx, UserUpdateResponseDto dto);
+
+    Long deleteUser(Long idx);
 }
