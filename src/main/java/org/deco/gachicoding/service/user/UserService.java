@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.deco.gachicoding.domain.user.User;
 import org.deco.gachicoding.domain.user.UserRepository;
 import org.deco.gachicoding.domain.utils.email.ConfirmationToken;
+import org.deco.gachicoding.dto.user.UserSaveRequestDto;
 import org.deco.gachicoding.service.email.ConfirmationTokenService;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final ConfirmationTokenService confirmationTokenService;
+
+    public Long registerUser(UserSaveRequestDto dto) {
+        System.out.println("User Save 수행");
+        long idx = userRepository.save(dto.toEntity()).getIdx();
+        confirmationTokenService.createEmailConfirmationToken(dto.getEmail());
+        return idx;
+    }
 
     public User findByUserEmail(String email) {
         return userRepository.findByEmail(email);

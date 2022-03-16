@@ -21,12 +21,12 @@ public class ConfirmationTokenService {
      * 이메일 인증 토큰 생성
      * @return
      */
-    public String createEmailConfirmationToken(String userId, String receiverEmail) {
+    public String createEmailConfirmationToken(String receiverEmail) {
 
-        Assert.hasText(userId, "userId는 필수 입니다.");
+//        Assert.hasText(userId, "userId는 필수 입니다.");
         Assert.hasText(receiverEmail, "receiverEmail은 필수 입니다.");
 
-        ConfirmationToken emailConfirmationToken = ConfirmationToken.createEmailConfirmationToken(userId);
+        ConfirmationToken emailConfirmationToken = ConfirmationToken.createEmailConfirmationToken(receiverEmail);
         confirmationTokenRepository.save(emailConfirmationToken);
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();

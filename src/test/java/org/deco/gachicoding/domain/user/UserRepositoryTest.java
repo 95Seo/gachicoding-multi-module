@@ -42,7 +42,6 @@ public class UserRepositoryTest {
                 .name("서영준")
                 .email("ay9564@naver.com")
                 .password("ay789456")
-                .type("NOMAL")
                 .build();
 
         //when - 실행
@@ -60,7 +59,6 @@ public class UserRepositoryTest {
                 .name("서영준")
                 .email("ay9564@naver.com")
                 .password("ay789456")
-                .type("NOMAL")
                 .build();
 
         testEntityManager.persist(user1);
@@ -69,7 +67,6 @@ public class UserRepositoryTest {
                 .name("김인환")
                 .email("inhwan@naver.com")
                 .password("log4junit")
-                .type("NOMAL")
                 .build();
 
         testEntityManager.persist(user2);
@@ -78,7 +75,6 @@ public class UserRepositoryTest {
                 .name("김인표")
                 .email("inpyo@naver.com")
                 .password("javascriptreact")
-                .type("NOMAL")
                 .build();
 
         testEntityManager.persist(user3);
@@ -103,7 +99,6 @@ public class UserRepositoryTest {
                 .name("서영준")
                 .email("ay7871@naver.com")
                 .password("ay789456")
-                .type("NOMAL")
                 .build();
 
         testEntityManager.persist(user1);
@@ -112,7 +107,6 @@ public class UserRepositoryTest {
                 .name("김인환")
                 .email("inhwan@naver.com")
                 .password("log4junit")
-                .type("NOMAL")
                 .build();
 
         testEntityManager.persist(user2);
@@ -121,7 +115,6 @@ public class UserRepositoryTest {
                 .name("김인표")
                 .email("inpyo@naver.com")
                 .password("javascriptreact")
-                .type("NOMAL")
                 .build();
 
         testEntityManager.persist(user3);
@@ -143,7 +136,6 @@ public class UserRepositoryTest {
                 .name("서영준")
                 .email("ay9564@naver.com")
                 .password("ay789456")
-                .type("NOMAL")
                 .build();
 
         testEntityManager.persist(user1);
@@ -152,7 +144,6 @@ public class UserRepositoryTest {
                 .name("김인환")
                 .email("inhwan@naver.com")
                 .password("log4junit")
-                .type("NOMAL")
                 .build();
 
         testEntityManager.persist(user2);

@@ -27,11 +27,10 @@ public class User {
     private String role;
 
     @Builder
-    public User(String name, String email, String password, String type) {
+    public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.type = type;
     }
 
 }

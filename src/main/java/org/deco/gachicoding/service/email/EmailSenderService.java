@@ -16,4 +16,5 @@ public class EmailSenderService {
     public void sendEmail(SimpleMailMessage email) {
         javaMailSender.send(email);
     }
+
 }
