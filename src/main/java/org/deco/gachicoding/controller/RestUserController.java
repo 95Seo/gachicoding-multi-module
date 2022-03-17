@@ -33,4 +33,6 @@ public class RestUserController {
     public Long deleteUser(@PathVariable Long idx){
         return userService.deleteUser(idx);
     }
+
+
 }
