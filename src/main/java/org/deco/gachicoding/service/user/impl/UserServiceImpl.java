@@ -4,14 +4,22 @@ import lombok.RequiredArgsConstructor;
 import org.deco.gachicoding.domain.user.User;
 import org.deco.gachicoding.domain.user.UserRepository;
 import org.deco.gachicoding.domain.utils.email.ConfirmationToken;
+import org.deco.gachicoding.dto.user.JwtRequestDto;
 import org.deco.gachicoding.dto.user.UserResponseDto;
 import org.deco.gachicoding.dto.user.UserSaveRequestDto;
 import org.deco.gachicoding.dto.user.UserUpdateResponseDto;
 import org.deco.gachicoding.service.user.UserService;
 import org.deco.gachicoding.service.email.ConfirmationTokenService;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,11 +27,14 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final ConfirmationTokenService confirmationTokenService;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
     @Transactional
     @Override
     public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmail(email)
+                .orElseThrow(()-> new IllegalArgumentException("회원이 존재하지 않습니다. 이메일 = " + email));
     }
 
     @Transactional
@@ -38,8 +49,30 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
+    public String login(JwtRequestDto request) throws Exception {
+
+        System.out.println(request.getEmail());
+        System.out.println(request.getPassword());
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+
+        System.out.println("2222");
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        System.out.println("3333");
+        UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
+
+        System.out.println("4444");
+        return principal.getUsername();
+    }
+
+    @Transactional
+    @Override
     public Long registerUser(UserSaveRequestDto dto) {
         System.out.println("User Save 수행");
+
+        dto.encryptPassword(passwordEncoder);
+
         Long idx = userRepository.save(dto.toEntity()).getIdx();
 
         // 이메일 인증 기능 분리 필요

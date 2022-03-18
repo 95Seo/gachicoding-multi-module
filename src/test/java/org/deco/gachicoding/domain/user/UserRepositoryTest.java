@@ -120,7 +120,8 @@ public class UserRepositoryTest {
         testEntityManager.persist(user3);
 
         //when
-        User user = userRepository.findByEmail("ay7871@naver.com");
+        User user = userRepository.findByEmail("ay7871@naver.com")
+                .orElseThrow(()-> new IllegalArgumentException("회원이 존재하지 않습니다."));
 
         //then
         assertEquals("서영준", user.getName());
