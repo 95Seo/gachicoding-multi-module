@@ -50,19 +50,13 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public String login(JwtRequestDto request) throws Exception {
-
-        System.out.println(request.getEmail());
-        System.out.println(request.getPassword());
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
-        System.out.println("2222");
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        System.out.println("3333");
         UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
 
-        System.out.println("4444");
         return principal.getUsername();
     }
 
