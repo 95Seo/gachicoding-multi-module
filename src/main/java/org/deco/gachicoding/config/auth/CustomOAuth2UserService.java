@@ -2,6 +2,7 @@ package org.deco.gachicoding.config.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.deco.gachicoding.config.auth.dto.OAuthAttributes;
+import org.deco.gachicoding.config.auth.dto.SessionUser;
 import org.deco.gachicoding.domain.user.User;
 import org.deco.gachicoding.domain.user.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -37,7 +38,7 @@ public class CustomOAuth2UserService implements OAuth2UserService {
                 .getUserNameAttributeName();
 
 //      OAuth2UserService 를 통해 얻은 정보를 담는 클래스, 소셜 로그인 시 제공받은 회원의 정보를 담음.
-        OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttribute());
+        OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
         User user = saveOrUpdate(attributes);
         httpSession.setAttribute("user", new SessionUser(user));
@@ -47,8 +48,12 @@ public class CustomOAuth2UserService implements OAuth2UserService {
 
     private User saveOrUpdate(OAuthAttributes attributes) {
         User user = userRepository.findByEmail(attributes.getEmail())
-                .map(entity -> entity.update(attributes.getName(), attributes.getPicture()))
+                .map(entity -> entity.socialUpdate(attributes.getName(), attributes.getEmail()))
                 .orElse(attributes.toEntity());
+
+//        User user = userRepository.findByEmail(attributes.getEmail())
+//                .map(entity -> entity.socialUpdate(attributes.getName()));
+////                .orElse(attributes.toEntity())
         return userRepository.save(user);
     }
 }

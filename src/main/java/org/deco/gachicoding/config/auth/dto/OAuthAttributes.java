@@ -1,6 +1,5 @@
 package org.deco.gachicoding.config.auth.dto;
 
-import com.fasterxml.jackson.databind.deser.std.ObjectArrayDeserializer;
 import lombok.Builder;
 import lombok.Getter;
 import org.deco.gachicoding.domain.user.Role;
@@ -8,7 +7,7 @@ import org.deco.gachicoding.domain.user.User;
 
 import java.util.Map;
 
-@Getter
+@Getter // 소셜 로그인 할 때, 받아오는 값들
 public class OAuthAttributes {
     private Map<String, Object> attributes;
     private String nameAttributeKey;
@@ -43,7 +42,7 @@ public class OAuthAttributes {
         return User.builder()
                 .name(name)
                 .email(email)
-                .role(Role.GUEST)
+                .role(Role.USER)
                 .build();
     }
 }
