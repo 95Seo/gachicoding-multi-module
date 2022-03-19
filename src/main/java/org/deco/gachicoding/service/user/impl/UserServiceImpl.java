@@ -1,25 +1,21 @@
 package org.deco.gachicoding.service.user.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.deco.gachicoding.config.jwt.JwtTokenProvider;
 import org.deco.gachicoding.domain.user.User;
 import org.deco.gachicoding.domain.user.UserRepository;
 import org.deco.gachicoding.domain.utils.email.ConfirmationToken;
-import org.deco.gachicoding.dto.user.JwtRequestDto;
-import org.deco.gachicoding.dto.user.UserResponseDto;
-import org.deco.gachicoding.dto.user.UserSaveRequestDto;
-import org.deco.gachicoding.dto.user.UserUpdateResponseDto;
+import org.deco.gachicoding.dto.user.*;
 import org.deco.gachicoding.service.user.UserService;
 import org.deco.gachicoding.service.email.ConfirmationTokenService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +25,7 @@ public class UserServiceImpl implements UserService {
     private final ConfirmationTokenService confirmationTokenService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
     @Override
@@ -49,15 +46,17 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public String login(JwtRequestDto request) throws Exception {
+    public JwtResponseDto login(JwtRequestDto request) throws Exception {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return createJwtToken(authentication);
+    }
 
+    private JwtResponseDto createJwtToken(Authentication authentication) {
         UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
-
-        return principal.getUsername();
+        String token = jwtTokenProvider.generateToken(principal);
+        return new JwtResponseDto(token);
     }
 
     @Transactional

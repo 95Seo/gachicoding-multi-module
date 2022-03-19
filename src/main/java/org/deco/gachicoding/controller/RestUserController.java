@@ -1,10 +1,7 @@
 package org.deco.gachicoding.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.deco.gachicoding.dto.user.JwtRequestDto;
-import org.deco.gachicoding.dto.user.UserResponseDto;
-import org.deco.gachicoding.dto.user.UserSaveRequestDto;
-import org.deco.gachicoding.dto.user.UserUpdateResponseDto;
+import org.deco.gachicoding.dto.user.*;
 import org.deco.gachicoding.service.user.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +13,7 @@ public class RestUserController {
     private final UserService userService;
 
     @PostMapping("/user/login")
-    public String login(@RequestBody JwtRequestDto dto) throws Exception {
+    public JwtResponseDto login(@RequestBody JwtRequestDto dto) throws Exception {
         return userService.login(dto);
     }
 
