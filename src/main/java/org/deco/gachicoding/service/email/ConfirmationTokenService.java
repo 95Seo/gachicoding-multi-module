@@ -46,6 +46,6 @@ public class ConfirmationTokenService {
      */
     public ConfirmationToken findByIdExpirationDateAfterAndExpired(String confirmationTokenId) {
         Optional<ConfirmationToken> confirmationToken = confirmationTokenRepository.findByIdAndExpirationDateAfterAndExpired(confirmationTokenId, LocalDateTime.now(), false);
-        return confirmationToken.orElseThrow();
+        return confirmationToken.orElseThrow(()-> new IllegalArgumentException("기한이 만료된 토큰입니다."));
     }
 }

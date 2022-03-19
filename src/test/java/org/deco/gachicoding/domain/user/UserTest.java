@@ -15,7 +15,6 @@ class UserTest {
                 .name("서영준")
                 .email("ay9564@naver.com")
                 .password("ay789456")
-                .type("NOMAL")
                 .build();
 
         final String name = user.getName();

@@ -1,9 +1,8 @@
 package org.deco.gachicoding.service.user;
 
 import org.deco.gachicoding.domain.user.User;
-import org.deco.gachicoding.dto.user.UserResponseDto;
-import org.deco.gachicoding.dto.user.UserSaveRequestDto;
-import org.deco.gachicoding.dto.user.UserUpdateResponseDto;
+import org.deco.gachicoding.dto.user.*;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,6 +11,8 @@ public interface UserService {
     User getUserByEmail(String email);
 
     UserResponseDto getUser(Long idx);
+
+    JwtResponseDto login(JwtRequestDto request) throws Exception;
 
     Long registerUser(UserSaveRequestDto dto);
 
