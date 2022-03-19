@@ -1,12 +1,14 @@
-package org.deco.gachicoding.config.security;
+package org.deco.gachicoding.config.auth;
 
 import lombok.AllArgsConstructor;
 import org.deco.gachicoding.config.jwt.JwtAuthenticationFilter;
 import org.deco.gachicoding.config.jwt.JwtTokenProvider;
+import org.deco.gachicoding.domain.user.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,6 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 // api에도 시큐리티 접근 권한 설정이 먹힘
 @AllArgsConstructor
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenProvider jwtTokenProvider;
@@ -45,15 +48,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    protected  void configure(HttpSecurity http) throws Exception {
-        http.cors().disable()		//cors방지
-                .csrf().disable()		//csrf방지
-                .formLogin().disable()	//기본 로그인 페이지 없애기
+    protected void configure(HttpSecurity http) throws Exception {
+        http.cors().disable()        //cors방지
+                .csrf().disable()        //csrf방지
+                .formLogin().disable()    //기본 로그인 페이지 없애기
                 .authorizeRequests()
                 // login 없이 접근 허용 하는 url
                 .antMatchers("/api/user/**").permitAll()
                 // '/admin'의 경우 ADMIN 권한이 있는 사용자만 접근이 가능
-                .antMatchers("/admin").hasRole("ADMIN")
+                .antMatchers("/admin").hasRole(Role.ADMIN.name()) // Role의 User의 이름, 즉 "ROLE_USER"
                 // 그 외 모든 요청은 인증과정 필요
                 .anyRequest().authenticated()
                 .and()

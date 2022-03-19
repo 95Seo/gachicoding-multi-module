@@ -3,6 +3,7 @@ package org.deco.gachicoding.dto.user;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.deco.gachicoding.domain.user.Role;
 
 @Setter
 @Getter
@@ -13,9 +14,9 @@ public class UserUpdateResponseDto {
     private String email;
     private String password;
     private int activated;
-    private String role;
+    private Role role;
 
-    public UserUpdateResponseDto(String name, String email, String password, int activated, String role) {
+    public UserUpdateResponseDto(String name, String email, String password, int activated, Role role) {
         this.name = name;
         this.email = email;
         this.password = password;

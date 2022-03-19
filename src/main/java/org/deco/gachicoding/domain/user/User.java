@@ -22,10 +22,12 @@ public class User {
     private String password;
     private LocalDateTime regdate;
     private int activated;
-    private String role;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Builder
-    public User(Long idx, String name, String email, String password, LocalDateTime regdate, int activated, String role) {
+    public User(Long idx, String name, String email, String password, LocalDateTime regdate, int activated, Role role) {
         this.idx = idx;
         this.name = name;
         this.email = email;
@@ -35,7 +37,7 @@ public class User {
         this.role = role;
     }
 
-    public void update(String name, String email, String password, int activated, String role) {
+    public void update(String name, String email, String password, int activated, Role role) {
         this.name = name;
         this.email = email;
         this.password = password;
