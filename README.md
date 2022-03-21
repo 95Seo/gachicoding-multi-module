@@ -47,3 +47,4 @@
 * [AWS Access Denied]() - IAM 계정으로 로그인 시 접근이 안되는 현상(작성 전)
 * [Spring Security & OAuth2]() - 로그인 연동(구글, 카카오, 깃허브) 및 연동 시 아이디 중복 처리(작성 전)
 * [Spring Data JPA]() - not null 칼럼의 DynamicInsert,DynamicUpdate 어노테이션(작성 전)
+* [CORS]() - CORS 정책 위반과 이를 해결화는 정확한 방법(작성 전)
