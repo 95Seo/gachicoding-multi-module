@@ -16,6 +16,8 @@ build/
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
+
+/test/resources/application.preperties
 application.properties
 
 ### IntelliJ IDEA ###
