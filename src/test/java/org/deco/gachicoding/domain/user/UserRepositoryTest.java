@@ -1,6 +1,7 @@
 package org.deco.gachicoding.domain.user;
 
 import org.hamcrest.collection.IsEmptyCollection;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -21,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 //assertTrue(a);	조건 A가 참인가를 확인한다.
 //assertNotNull(a);	객체 A가 null이 아님을 확인한다.
 
+// 리포지토리 테스트 에선 디비와 연동된 CRUD 기능을 테스트 한다(관련된 예외처리에 대해선 아직 잘 모르겠음)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 // AutoConfigureTestDatabase => ANY(기본설정) : 내장 메모리 DB를 사용(휘발성) 
@@ -36,6 +38,7 @@ public class UserRepositoryTest {
 
     @Test
     @Rollback(false)
+    @DisplayName("UserRepository - 회원가입 테스트")
     public void UserJoinTest() {
         //given - 준비
         User user = User.builder()
@@ -53,6 +56,7 @@ public class UserRepositoryTest {
     }
 
     @Test
+    @DisplayName("UserRepository - 회원가입 후 유저 리스트 불러오기 테스트")
     public void UserJoinAndFindTest() {
         //given
         User user1 = User.builder()
@@ -93,6 +97,7 @@ public class UserRepositoryTest {
     }
 
     @Test
+    @DisplayName("UserRepository - 회원가입 후 이메일로 찾기(로그인) 테스트")
     public void UserJoinAndEmailFindTest() {
         //given
         User user1 = User.builder()
@@ -131,6 +136,7 @@ public class UserRepositoryTest {
     }
 
     @Test
+    @DisplayName("UserRepository - 회원가입 후 삭제 테스트")
     public void UserJoinAndDeleteTest() {
         //given
         User user1 = User.builder()

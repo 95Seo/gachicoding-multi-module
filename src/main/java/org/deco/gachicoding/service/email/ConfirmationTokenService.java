@@ -23,7 +23,6 @@ public class ConfirmationTokenService {
      */
     public String createEmailConfirmationToken(String receiverEmail) {
 
-//        Assert.hasText(userId, "userId는 필수 입니다.");
         Assert.hasText(receiverEmail, "receiverEmail은 필수 입니다.");
 
         ConfirmationToken emailConfirmationToken = ConfirmationToken.createEmailConfirmationToken(receiverEmail);
