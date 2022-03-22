@@ -5,6 +5,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
 
 @Getter

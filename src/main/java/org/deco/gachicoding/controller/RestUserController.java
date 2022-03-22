@@ -5,6 +5,8 @@ import org.deco.gachicoding.dto.user.*;
 import org.deco.gachicoding.service.user.UserService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api")
@@ -23,7 +25,7 @@ public class RestUserController {
     }
 
     @PostMapping("/user")
-    public Long registerUser(@RequestBody UserSaveRequestDto dto) {
+    public Long registerUser(@Valid @RequestBody UserSaveRequestDto dto) {
         return userService.registerUser(dto);
     }
 

@@ -6,7 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.deco.gachicoding.domain.user.User;
+import org.springframework.lang.Nullable;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import javax.validation.constraints.Email;
 
 @Getter
 @Setter
@@ -14,6 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class UserSaveRequestDto {
 
     private String name;
+    @Nullable
+    @Email(message = "올바른 형식의 아이디가 아닙니다.")
     private String email;
     private String password;
 

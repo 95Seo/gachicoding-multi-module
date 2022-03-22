@@ -5,14 +5,16 @@ import org.deco.gachicoding.dto.user.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public interface UserService {
 
-    User getUserByEmail(String email);
+    Optional<User> getUserByEmail(String email);
 
     UserResponseDto getUser(Long idx);
 
-    JwtResponseDto login(JwtRequestDto request) throws Exception;
+    JwtResponseDto login(JwtRequestDto request);
 
     Long registerUser(UserSaveRequestDto dto);
 
