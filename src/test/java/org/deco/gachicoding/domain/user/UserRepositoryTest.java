@@ -31,4 +31,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 // **주의 ANY설정 시 DataSource 정보가 application.properties에 있다면 에러 발생
 public class UserRepositoryTest {
 
+    @Autowired
+    UserRepository userRepository;
+
+    @Test
+    public void 이메일로_유저정보_가져오기() {
+
+        User user = userRepository.findByEmail("inhan1009@naver.com");
+        assertEquals("inhan1009@naver.com", user.getEmail());
+        assertEquals("김인환", user.getName());
+    }
 }

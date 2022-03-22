@@ -1,5 +1,8 @@
 package org.deco.gachicoding.domain.user;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.springframework.lang.Nullable;
 
