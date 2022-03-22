@@ -38,7 +38,7 @@ public class CustomOAuth2UserService implements OAuth2UserService {
                 .getUserNameAttributeName();
 
 //      OAuth2UserService 를 통해 얻은 정보를 담는 클래스, 소셜 로그인 시 제공받은 회원의 정보를 담음.
-        OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
+        OAuthAttributes attributes =  OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
         User user = saveOrUpdate(attributes);
         httpSession.setAttribute("user", new SessionUser(user));
