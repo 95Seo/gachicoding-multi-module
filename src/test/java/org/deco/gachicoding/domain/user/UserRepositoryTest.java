@@ -1,17 +1,14 @@
 package org.deco.gachicoding.domain.user;
 
-import org.hamcrest.collection.IsEmptyCollection;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.annotation.Rollback;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 //assertEquals(a, b);	객체 A와 B의 실제 값이 일치한지 확인한다.
@@ -35,10 +32,51 @@ public class UserRepositoryTest {
     UserRepository userRepository;
 
     @Test
-    public void 이메일로_유저정보_가져오기() {
+    public void 이메일로_유저조회() {
 
-        User user = userRepository.findByEmail("inhan1009@naver.com");
-        assertEquals("inhan1009@naver.com", user.getEmail());
-        assertEquals("김인환", user.getName());
+        Optional<User> user = userRepository.findByEmail("inhan1009@naver.com");
+
+        assertEquals("inhan1009@naver.com", user.get().getEmail());
+        assertEquals("김인환", user.get().getName());
+    }
+
+    @Test
+    public void 인덱스로_유저조회() {
+        Long idx = (long) 61;
+        Optional<User> user = userRepository.findById(idx);
+        assertEquals("inhan1009@naver.com", user.get().getEmail());
+        assertEquals("김인환", user.get().getName());
+    }
+
+    @Test
+    public void 유저_저장() {
+
+        String name = "가치코딩";
+        String email = "gachicoding@gachicoding.com";
+        String password = "gachi1234";
+        LocalDateTime regdate = LocalDateTime.now();
+        int activated = 1;
+        Role role = Role.USER;
+
+        User entity = User.builder()
+                .name(name)
+                .email(email)
+                .password(password)
+                .regdate(regdate)
+                .activated(activated)
+                .role(role)
+                .build();
+
+
+        userRepository.save(entity);
+        List<User> userList = userRepository.findAll();
+        User user = userList.get(userList.size() - 1);
+
+        assertEquals(name, user.getName());
+        assertEquals(email, user.getEmail());
+        assertEquals(password, user.getPassword());
+        assertEquals(regdate, user.getRegdate());
+        assertEquals(activated, user.getActivated());
+        assertEquals(role, user.getRole());
     }
 }
