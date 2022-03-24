@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 //assertEquals(a, b);	객체 A와 B의 실제 값이 일치한지 확인한다.
 //assertSame(a, b);     객체 A와 B가 같은 객체임을 확인한다.
@@ -68,9 +68,8 @@ public class UserRepositoryTest {
                 .build();
 
 
-        userRepository.save(entity);
-        List<User> userList = userRepository.findAll();
-        User user = userList.get(userList.size() - 1);
+        Long idx = userRepository.save(entity).getIdx();
+        User user = userRepository.findById(idx).get();
 
         assertEquals(name, user.getName());
         assertEquals(email, user.getEmail());
@@ -78,5 +77,53 @@ public class UserRepositoryTest {
         assertEquals(regdate, user.getRegdate());
         assertEquals(activated, user.getActivated());
         assertEquals(role, user.getRole());
+    }
+
+    @Test
+    public void 인덱스로_유저_삭제() {
+
+        Long idx = (long) 101;
+
+        userRepository.deleteById(idx);
+        Optional<User> user = userRepository.findById(idx);
+
+        assertTrue(user.isEmpty());
+    }
+
+    @Test
+    public void 유저정보_수정() {
+
+        String name = "가치코딩";
+        String email = "gachicoding@gachicoding.com";
+        String password = "gachi1234";
+        LocalDateTime regdate = LocalDateTime.now();
+        int activated = 1;
+        Role role = Role.USER;
+
+        User entity = User.builder()
+                .name(name)
+                .email(email)
+                .password(password)
+                .regdate(regdate)
+                .activated(activated)
+                .role(role)
+                .build();
+
+        Long idx = userRepository.save(entity).getIdx();
+        User user = userRepository.findById(idx).get();
+
+        String updateName = "수정된 이름";
+        String updateEmail = "수정된 메일";
+        String updatePassword = "수정된 비밀번호";
+        int updateAct = 0;
+        Role updateRole = Role.GUEST;
+
+        user.update(updateName,updateEmail,updatePassword, updateAct, updateRole);
+
+        assertEquals(updateName, userRepository.findById(idx).get().getName());
+        assertEquals(updateEmail, userRepository.findById(idx).get().getEmail());
+        assertEquals(updatePassword, userRepository.findById(idx).get().getPassword());
+        assertEquals(updateAct, userRepository.findById(idx).get().getActivated());
+        assertEquals(updateRole, userRepository.findById(idx).get().getRole());
     }
 }
