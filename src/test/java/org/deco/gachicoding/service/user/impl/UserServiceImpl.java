@@ -28,6 +28,11 @@ public class UserServiceImpl implements UserService {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
 
+    @Override
+    public boolean checkEmailDuplicate(String email) {
+        return false;
+    }
+
     @Transactional
     @Override
     public Optional<User> getUserByEmail(String email) {
@@ -71,27 +76,8 @@ public class UserServiceImpl implements UserService {
     // 커밋을 앞에서 예외를 잡았기 때문에 문제 없다고 판단, 커밋을 실행한다. 하지만 roll-back only**이 마킹되어 있어 **롤백함.
     // 에러 발생 - 이와 관련해선 좀 딥한 부분인거 같아서 공부를 좀 더 해야할 거 같음 + 트러블 슈팅으로 넣으면 좋을 듯
     // @Transactional 사용도 신중해야 할 필요가 있을 듯
-//    @Override
-//    public Long registerUser(UserSaveRequestDto dto) {
-//
-//        dto.encryptPassword(passwordEncoder);
-//
-//        try {
-//            Long idx = userRepository.save(dto.toEntity()).getIdx();
-//
-//            System.out.println("User Save 수행");
-//
-//            // 이메일 인증 기능 분리 필요
-//            confirmationTokenService.createEmailConfirmationToken(dto.getEmail());
-//
-//            return idx;
-//            // ConstraintViolationException - 디비와 매핑되어있는 Entity 객체의 Key가 중복으로 save 될 때 발생하는 예외
-//        } catch (DataIntegrityViolationException e) {
-////            e.printStackTrace();
-//            System.out.println(dto.getEmail() + " : User Save 실패\n 중복된 아이디 입니다.");
-//            return Long.valueOf(-100);
-//        }
-//    }
+
+
 
     @Override
     public Long registerUser(UserSaveRequestDto dto) {

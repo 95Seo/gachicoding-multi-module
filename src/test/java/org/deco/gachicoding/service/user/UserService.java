@@ -9,6 +9,9 @@ import java.util.Optional;
 @Service
 public interface UserService {
 
+    // 이메일 중복 체크
+    boolean checkEmailDuplicate(String email);
+
     Optional<User> getUserByEmail(String email);
 
     UserResponseDto getUser(Long idx);

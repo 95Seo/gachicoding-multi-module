@@ -9,18 +9,29 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 // 서비스 테스트에서 비즈니스 로직에서 발생할 수 있는 예외 상황의 테스트를 진행한다
-@ExtendWith(SpringExtension.class)
+//@ExtendWith(SpringExtension.class)
+
 @SpringBootTest
 public class UserServiceTest {
 
     @Autowired
     UserService userService;
+
+    @Test
+    void 이메일_중복_체크() {
+
+
+        String s = "";
+        assertTrue(userService.checkEmailDuplicate(s));
+    }
+
 
     @Test
     @DisplayName("UserService - JWT 로그인 테스트")
