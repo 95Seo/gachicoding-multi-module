@@ -28,9 +28,13 @@ public class UserServiceImpl implements UserService {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
 
+
     @Override
-    public boolean checkEmailDuplicate(String email) {
-        return false;
+    public boolean existDuplicateEmail(String email) {
+
+        boolean isDuplicate = getUserByEmail(email).isPresent();
+
+        return isDuplicate;
     }
 
     @Transactional
@@ -78,13 +82,12 @@ public class UserServiceImpl implements UserService {
     // @Transactional 사용도 신중해야 할 필요가 있을 듯
 
 
-
     @Override
     public Long registerUser(UserSaveRequestDto dto) {
 
         dto.encryptPassword(passwordEncoder);
 
-        if(getUserByEmail(dto.getEmail()).get() == null) {
+        if (getUserByEmail(dto.getEmail()).get() == null) {
             System.out.println("User Save 수행");
 
             Long idx = userRepository.save(dto.toEntity()).getIdx();
@@ -101,6 +104,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 이메일 인증 로직
+     *
      * @param token
      */
     @Transactional

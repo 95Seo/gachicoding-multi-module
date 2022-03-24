@@ -1,5 +1,6 @@
 package org.deco.gachicoding.service;
 
+import org.deco.gachicoding.domain.user.User;
 import org.deco.gachicoding.dto.user.JwtRequestDto;
 import org.deco.gachicoding.dto.user.JwtResponseDto;
 import org.deco.gachicoding.dto.user.UserResponseDto;
@@ -9,9 +10,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,17 +23,39 @@ import static org.junit.jupiter.api.Assertions.*;
 //@ExtendWith(SpringExtension.class)
 
 @SpringBootTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class UserServiceTest {
 
     @Autowired
     UserService userService;
 
     @Test
-    void 이메일_중복_체크() {
+    void 이메일로_유저정보_가져오기_해당유저존재() {
+        String email = "ay9564@naver.com";
+        Optional<User> user = userService.getUserByEmail(email);
+        assertTrue(user.isPresent());
+    }
+
+    @Test
+    void 이메일로_유저정보_가져오기_해당유저없음() {
+        String email = "inhan1009@naver.com";
+        Optional<User> user = userService.getUserByEmail(email);
+        assertTrue(user.isEmpty());
+    }
 
 
-        String s = "";
-        assertTrue(userService.checkEmailDuplicate(s));
+    @Test
+    void 중복이메일_존재_true() {
+
+        String email = "ay9564@naver.com";
+        assertTrue(userService.existDuplicateEmail(email));
+    }
+
+    @Test
+    void 중복이메일_존재하지_않음_false() {
+
+        String email = "inhan1009@naver.com";
+        assertFalse(userService.existDuplicateEmail(email));
     }
 
 

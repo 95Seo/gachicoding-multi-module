@@ -1,5 +1,6 @@
 package org.deco.gachicoding.service.user;
 
+
 import org.deco.gachicoding.domain.user.User;
 import org.deco.gachicoding.dto.user.*;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,7 @@ import java.util.Optional;
 public interface UserService {
 
     // 이메일 중복 체크
-    boolean checkEmailDuplicate(String email);
+    boolean existDuplicateEmail(String email);
 
     Optional<User> getUserByEmail(String email);
 
