@@ -24,5 +24,8 @@ public interface UserService {
 
     Long deleteUser(Long idx);
 
+    String getKakaoAccessToken(String code);
+
+    void getKakaoUserInfo(String token) throws Exception;
 
 }

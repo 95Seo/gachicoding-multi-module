@@ -39,5 +39,13 @@ public class RestUserController {
         return userService.deleteUser(idx);
     }
 
+    @GetMapping("/user/kakao")
+    public Long kakaoUserLogin(String code) throws Exception {
+        System.out.println("kakaoCode" + code);
+        String accessToken = userService.getKakaoAccessToken(code);
+        userService.getKakaoUserInfo(accessToken);
+        return null;
+    }
+
 
 }
