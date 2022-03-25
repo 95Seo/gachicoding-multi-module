@@ -29,6 +29,8 @@
 * Java 11 (jdk-11.0.13)
 * gradle 7.4
 * react 8.1.2
+* aws
+* terraform 1.1.7
 
 <br>
 
