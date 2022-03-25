@@ -21,6 +21,7 @@
 ## 리포지토리
 * [백엔드 리포지토리(현재 리포지토리)](https://github.com/inhwanK/gachicoding)
 * [프론트엔드 리포지토리]()
+* [DevOps 리포지토리](https://github.com/BAE-JI-WANG/gachicoding_DevOps)
 
 <br>
 
