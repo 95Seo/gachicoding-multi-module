@@ -1,8 +1,8 @@
 package org.deco.gachicoding.service.email;
 
 import lombok.RequiredArgsConstructor;
-import org.deco.gachicoding.domain.utils.email.ConfirmationToken;
-import org.deco.gachicoding.domain.utils.email.ConfirmationTokenRepository;
+import org.deco.gachicoding.domain.utils.email.EmailToken;
+import org.deco.gachicoding.domain.utils.email.EmailTokenRepository;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -12,9 +12,9 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ConfirmationTokenService {
+public class EmailTokenService {
 
-    private final ConfirmationTokenRepository confirmationTokenRepository;
+    private final EmailTokenRepository emailTokenRepository;
     private final EmailSenderService emailSenderService;
 
     /**
@@ -25,16 +25,16 @@ public class ConfirmationTokenService {
 
         Assert.hasText(receiverEmail, "receiverEmail은 필수 입니다.");
 
-        ConfirmationToken emailConfirmationToken = ConfirmationToken.createEmailConfirmationToken(receiverEmail);
-        confirmationTokenRepository.save(emailConfirmationToken);
+        EmailToken emailConfirmationToken = EmailToken.createEmailConfirmationToken(receiverEmail);
+        emailTokenRepository.save(emailConfirmationToken);
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(receiverEmail);
         mailMessage.setSubject("회원가입 이메일 인증");
-        mailMessage.setText("http://localhost:8090/confirm-email?token="+emailConfirmationToken.getId());
+        mailMessage.setText("http://localhost:8090/confirm-email?token="+emailConfirmationToken.getToken());
         emailSenderService.sendEmail(mailMessage);
 
-        return emailConfirmationToken.getId();
+        return emailConfirmationToken.getToken();
 
     }
 
@@ -43,8 +43,8 @@ public class ConfirmationTokenService {
      * @param confirmationTokenId
      * @return
      */
-    public ConfirmationToken findByIdExpirationDateAfterAndExpired(String confirmationTokenId) {
-        Optional<ConfirmationToken> confirmationToken = confirmationTokenRepository.findByIdAndExpirationDateAfterAndExpired(confirmationTokenId, LocalDateTime.now(), false);
+    public EmailToken findByIdExpirationDateAfterAndExpired(String confirmationTokenId) {
+        Optional<EmailToken> confirmationToken = emailTokenRepository.findByTokenAndExpirationDateAfterAndExpired(confirmationTokenId, LocalDateTime.now(), false);
         return confirmationToken.orElseThrow(()-> new IllegalArgumentException("기한이 만료된 토큰입니다."));
     }
 }

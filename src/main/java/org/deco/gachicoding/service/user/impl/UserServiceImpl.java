@@ -4,23 +4,19 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
 import org.deco.gachicoding.config.jwt.JwtTokenProvider;
-import org.deco.gachicoding.domain.user.User;
-import org.deco.gachicoding.domain.user.UserRepository;
-import org.deco.gachicoding.domain.utils.email.ConfirmationToken;
+import org.deco.gachicoding.domain.user.*;
+import org.deco.gachicoding.domain.utils.email.EmailToken;
 import org.deco.gachicoding.dto.user.*;
 import org.deco.gachicoding.service.user.UserService;
-import org.deco.gachicoding.service.email.ConfirmationTokenService;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.deco.gachicoding.service.email.EmailTokenService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import javax.validation.ConstraintViolationException;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -31,10 +27,11 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final ConfirmationTokenService confirmationTokenService;
+    private final EmailTokenService confirmationTokenService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
+    private final SocialAuthRepository socialAuthRepository;
 
     @Transactional
     @Override
@@ -72,41 +69,12 @@ public class UserServiceImpl implements UserService {
         return new JwtResponseDto(token);
     }
 
-    // @Transactional - 아이디 중복 시 - Transaction silently rolled back because it has been marked as rollback-only 발생
-    // 이유 트랜잭션은 재사용 될수 없다.
-    // save하면서 같은 이메일이 있으면 예외를 발생, 예외 발생 시 기본 값으로 들어있는 롤백이 true가 됨
-    // save가 끝나고 나오면서 registerUser로 돌아 왔을때 @Transactional어노테이션이 있으면
-    // 커밋을 앞에서 예외를 잡았기 때문에 문제 없다고 판단, 커밋을 실행한다. 하지만 roll-back only**이 마킹되어 있어 **롤백함.
-    // 에러 발생 - 이와 관련해선 좀 딥한 부분인거 같아서 공부를 좀 더 해야할 거 같음 + 트러블 슈팅으로 넣으면 좋을 듯
-    // @Transactional 사용도 신중해야 할 필요가 있을 듯
-//    @Override
-//    public Long registerUser(UserSaveRequestDto dto) {
-//
-//        dto.encryptPassword(passwordEncoder);
-//
-//        try {
-//            Long idx = userRepository.save(dto.toEntity()).getIdx();
-//
-//            System.out.println("User Save 수행");
-//
-//            // 이메일 인증 기능 분리 필요
-//            confirmationTokenService.createEmailConfirmationToken(dto.getEmail());
-//
-//            return idx;
-//            // ConstraintViolationException - 디비와 매핑되어있는 Entity 객체의 Key가 중복으로 save 될 때 발생하는 예외
-//        } catch (DataIntegrityViolationException e) {
-////            e.printStackTrace();
-//            System.out.println(dto.getEmail() + " : User Save 실패\n 중복된 아이디 입니다.");
-//            return Long.valueOf(-100);
-//        }
-//    }
-
     @Override
     public Long registerUser(UserSaveRequestDto dto) {
 
         dto.encryptPassword(passwordEncoder);
 
-        if(getUserByEmail(dto.getEmail()).get() == null) {
+        if(getUserByEmail(dto.getEmail()).isEmpty()) {
             System.out.println("User Save 수행");
 
             Long idx = userRepository.save(dto.toEntity()).getIdx();
@@ -121,6 +89,19 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public Long registerSocial(SocialSaveRequestDto dto) {
+        System.out.println("Social Save 수행");
+
+        Long idx = socialAuthRepository.save(dto.toEntity()).getIdx();
+
+        return idx;
+    }
+
+    public Optional<SocialAuth> getSocialTypeAndEmail(SocialSaveRequestDto dto) {
+        return socialAuthRepository.findByTypeAndSocialId(dto.getType(), dto.getSocial_id());
+    }
+
     /**
      * 이메일 인증 로직
      * @param token
@@ -128,7 +109,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void confirmEmail(String token) {
-        ConfirmationToken findConfirmationToken = confirmationTokenService.findByIdExpirationDateAfterAndExpired(token);
+        EmailToken findConfirmationToken = confirmationTokenService.findByIdExpirationDateAfterAndExpired(token);
         Optional<User> findUserInfo = getUserByEmail(findConfirmationToken.getEmail());
         findConfirmationToken.useToken();   // 토큰 만료 로직을 구현해주면 된다. ex) expired 값을 true 로 변경
 //        findUserInfo.emailVerifiedSuccess();    // 유저의 이메일 인증 값 변경 로직을 구현해 주면 된다. ex) emailVerified 값을 true로 변경
@@ -213,11 +194,14 @@ public class UserServiceImpl implements UserService {
     }
 
     // 엑세스 토큰 이용해 유저 정보 가져오기
-    public void getKakaoUserInfo(String token) throws Exception {
+    public SocialSaveRequestDto getKakaoUserInfo(String token) throws Exception {
         String reqURL = "https://kapi.kakao.com/v2/user/me";
+
+        SocialSaveRequestDto social = null;
 
         // access_token을 이용하여 사용자 정보 조회
         try {
+            social = new SocialSaveRequestDto();
             URL url = new URL(reqURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
@@ -246,17 +230,26 @@ public class UserServiceImpl implements UserService {
 
             int id = element.getAsJsonObject().get("id").getAsInt();
             boolean hasEmail = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("has_email").getAsBoolean();
+            String nickname = element.getAsJsonObject().get("properties").getAsJsonObject().get("nickname").getAsString();
             String email = "";
             if(hasEmail) {
                 email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
             }
 
             System.out.println("id : " + id);
+            System.out.println("nickname : " + nickname);
             System.out.println("email : " + email);
+
+            social.setName(nickname);
+            social.setSocial_id(email);
+            // 패스워드 어케할지 고민
+            social.setType("kakao");
 
             br.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return social;
     }
 }

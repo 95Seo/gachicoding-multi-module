@@ -1,5 +1,6 @@
 package org.deco.gachicoding.service.user;
 
+import org.deco.gachicoding.domain.user.SocialAuth;
 import org.deco.gachicoding.domain.user.User;
 import org.deco.gachicoding.dto.user.*;
 import org.springframework.security.core.Authentication;
@@ -18,6 +19,10 @@ public interface UserService {
 
     Long registerUser(UserSaveRequestDto dto);
 
+    Long registerSocial(SocialSaveRequestDto dto);
+
+    Optional<SocialAuth> getSocialTypeAndEmail(SocialSaveRequestDto dto);
+
     void confirmEmail(String token);
 
     Long updateUser(Long idx, UserUpdateResponseDto dto);
@@ -26,6 +31,6 @@ public interface UserService {
 
     String getKakaoAccessToken(String code);
 
-    void getKakaoUserInfo(String token) throws Exception;
+    SocialSaveRequestDto getKakaoUserInfo(String token) throws Exception;
 
 }
