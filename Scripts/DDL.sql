@@ -1,11 +1,11 @@
--- 유저
-DROP TABLE IF EXISTS `gachicoding`.`user` RESTRICT;
-
 -- 이메일토큰
 DROP TABLE IF EXISTS `gachicoding`.`email_token` RESTRICT;
 
 -- 소셜인증
 DROP TABLE IF EXISTS `gachicoding`.`social_auth` RESTRICT;
+
+-- 유저
+DROP TABLE IF EXISTS `gachicoding`.`user` RESTRICT;
 
 -- gachicoding
 DROP SCHEMA IF EXISTS `gachicoding`;
@@ -19,10 +19,10 @@ CREATE TABLE `gachicoding`.`user` (
                                       `name`           VARCHAR(255)        NOT NULL COMMENT '유저이름', -- 유저이름
                                       `email`          VARCHAR(255)        NOT NULL COMMENT '이메일', -- 이메일
                                       `password`       VARCHAR(255)        NOT NULL COMMENT '비밀번호', -- 비밀번호
-                                      `regdate`        DATETIME            NOT NULL COMMENT '생성일자', -- 생성일자
-                                      `activated`      BOOLEAN             NOT NULL COMMENT '활성상태', -- 활성상태
-                                      `role`           VARCHAR(15)         NOT NULL COMMENT '권한', -- 권한
-                                      `authentication` BOOLEAN             NOT NULL COMMENT '인증여부' -- 인증여부
+                                      `regdate`        DATETIME            NOT NULL DEFAULT now() COMMENT '생성일자', -- 생성일자
+                                      `activated`      BOOLEAN             NOT NULL DEFAULT true COMMENT '활성상태', -- 활성상태
+                                      `role`           VARCHAR(15)         NOT NULL DEFAULT 'ROLE_GUEST' COMMENT '권한', -- 권한
+                                      `authentication` BOOLEAN             NOT NULL DEFAULT false COMMENT '인증여부' -- 인증여부
 )
     COMMENT '유저';
 
@@ -38,7 +38,7 @@ ALTER TABLE `gachicoding`.`user`
 
 -- 이메일토큰
 CREATE TABLE `gachicoding`.`email_token` (
-                                             `token`           VARCHAR(255) NOT NULL COMMENT '토큰', -- 토큰
+                                             `token`           VARCHAR(36)  NOT NULL COMMENT '토큰', -- 토큰
                                              `email`           VARCHAR(255) NOT NULL COMMENT '이메일', -- 이메일
                                              `regdate`         DATETIME     NOT NULL COMMENT '생성일시', -- 생성일시
                                              `expiration_date` DATETIME     NOT NULL COMMENT '만료일시' -- 만료일시
@@ -68,6 +68,9 @@ ALTER TABLE `gachicoding`.`social_auth`
         PRIMARY KEY (
                      `idx` -- 소셜인증번호
             );
+
+ALTER TABLE `gachicoding`.`social_auth`
+    MODIFY COLUMN `idx` BIGINT(21) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '소셜인증번호';
 
 -- 소셜인증
 ALTER TABLE `gachicoding`.`social_auth`
