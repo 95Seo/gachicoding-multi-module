@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
 
-
+//    @Transactional
     @Override
     public boolean existDuplicateEmail(String email) {
 
