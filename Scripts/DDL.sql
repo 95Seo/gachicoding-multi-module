@@ -1,11 +1,11 @@
+-- 유저
+DROP TABLE IF EXISTS `gachicoding`.`user` RESTRICT;
+
 -- 이메일토큰
 DROP TABLE IF EXISTS `gachicoding`.`email_token` RESTRICT;
 
 -- 소셜인증
 DROP TABLE IF EXISTS `gachicoding`.`social_auth` RESTRICT;
-
--- 유저
-DROP TABLE IF EXISTS `gachicoding`.`user` RESTRICT;
 
 -- gachicoding
 DROP SCHEMA IF EXISTS `gachicoding`;
@@ -40,7 +40,7 @@ ALTER TABLE `gachicoding`.`user`
 CREATE TABLE `gachicoding`.`email_token` (
                                              `token`           VARCHAR(36)  NOT NULL COMMENT '토큰', -- 토큰
                                              `email`           VARCHAR(255) NOT NULL COMMENT '이메일', -- 이메일
-                                             `regdate`         DATETIME     NOT NULL COMMENT '생성일시', -- 생성일시
+                                             `regdate`         DATETIME     NOT NULL DEFAULT now() COMMENT '생성일시', -- 생성일시
                                              `expiration_date` DATETIME     NOT NULL COMMENT '만료일시' -- 만료일시
 )
     COMMENT '이메일토큰';
