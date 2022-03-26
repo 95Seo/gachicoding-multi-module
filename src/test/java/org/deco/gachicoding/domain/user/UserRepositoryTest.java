@@ -34,18 +34,18 @@ public class UserRepositoryTest {
     @Test
     public void 이메일로_유저조회() {
 
-        Optional<User> user = userRepository.findByEmail("inhan1009@naver.com");
+        Optional<User> user = userRepository.findByEmail("test@test.com");
 
-        assertEquals("inhan1009@naver.com", user.get().getEmail());
-        assertEquals("김인환", user.get().getName());
+        assertEquals("test@test.com", user.get().getEmail());
+        assertEquals("테스트", user.get().getName());
     }
 
     @Test
     public void 인덱스로_유저조회() {
-        Long idx = (long) 61;
+        Long idx = (long) 1;
         Optional<User> user = userRepository.findById(idx);
-        assertEquals("inhan1009@naver.com", user.get().getEmail());
-        assertEquals("김인환", user.get().getName());
+        assertEquals("test@test.com", user.get().getEmail());
+        assertEquals("테스트", user.get().getName());
     }
 
     @Test
@@ -82,7 +82,7 @@ public class UserRepositoryTest {
     @Test
     public void 인덱스로_유저_삭제() {
 
-        Long idx = (long) 101;
+        Long idx = (long) 1;
 
         userRepository.deleteById(idx);
         Optional<User> user = userRepository.findById(idx);
