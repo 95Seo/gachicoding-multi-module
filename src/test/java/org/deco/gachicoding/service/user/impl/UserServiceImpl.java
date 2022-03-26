@@ -45,16 +45,6 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserResponseDto getUser(Long idx) {
-
-        User user = userRepository.findById(idx)
-                .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다. 회원 번호 = " + idx));
-
-        return new UserResponseDto(user);
-    }
-
-    @Transactional
-    @Override
     public JwtResponseDto login(JwtRequestDto request) {
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -85,6 +75,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Long registerUser(UserSaveRequestDto dto) {
 
+        /*
         dto.encryptPassword(passwordEncoder);
 
         if (getUserByEmail(dto.getEmail()).get() == null) {
@@ -100,6 +91,9 @@ public class UserServiceImpl implements UserService {
             System.out.println(dto.getEmail() + " : User Save 실패\n 중복된 아이디 입니다.");
             return Long.valueOf(-100);
         }
+        */
+
+        return (long) -1;
     }
 
     /**

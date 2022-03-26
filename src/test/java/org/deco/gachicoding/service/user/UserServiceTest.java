@@ -1,20 +1,17 @@
-package org.deco.gachicoding.service;
+package org.deco.gachicoding.service.user;
 
 import org.deco.gachicoding.domain.user.User;
 import org.deco.gachicoding.dto.user.JwtRequestDto;
 import org.deco.gachicoding.dto.user.JwtResponseDto;
 import org.deco.gachicoding.dto.user.UserResponseDto;
 import org.deco.gachicoding.dto.user.UserSaveRequestDto;
-import org.deco.gachicoding.service.user.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.swing.text.html.Option;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,7 +28,7 @@ public class UserServiceTest {
 
     @Test
     void 이메일로_유저정보_가져오기_해당유저존재() {
-        String email = "ay9564@naver.com";
+        String email = "test@test.com";
         Optional<User> user = userService.getUserByEmail(email);
         assertTrue(user.isPresent());
     }
@@ -47,7 +44,7 @@ public class UserServiceTest {
     @Test
     void 중복이메일_존재_true() {
 
-        String email = "ay9564@naver.com";
+        String email = "test@test.com";
         assertTrue(userService.existDuplicateEmail(email));
     }
 
@@ -58,6 +55,23 @@ public class UserServiceTest {
         assertFalse(userService.existDuplicateEmail(email));
     }
 
+    @Test
+    void 회원가입_성공(){
+
+        String email = "inhan1009@naver.com";
+        String name = "김인환";
+        String password = "1234";
+
+        UserSaveRequestDto dto = new UserSaveRequestDto(name, email, password);
+
+        userService.registerUser(dto);
+
+        Optional<User> user = userService.getUserByEmail(email);
+
+        assertEquals(email,user.get().getEmail());
+        assertEquals(name, user.get().getName());
+        assertEquals(password, user.get().getPassword());
+    }
 
     @Test
     @DisplayName("UserService - JWT 로그인 테스트")
@@ -108,6 +122,7 @@ public class UserServiceTest {
     @DisplayName("UserService - 회원가입 테스트")
     void JoinUser() {
         // Given
+        /*
         UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto();
         userSaveRequestDto.setEmail("ay9564@naver.com");
         userSaveRequestDto.setName("서영준");
@@ -119,6 +134,7 @@ public class UserServiceTest {
 
         // Then
         assertEquals(user.getEmail(), userSaveRequestDto.getEmail());
+        */
     }
 
     @Test

@@ -15,8 +15,6 @@ public interface UserService {
 
     Optional<User> getUserByEmail(String email);
 
-    UserResponseDto getUser(Long idx);
-
     JwtResponseDto login(JwtRequestDto request);
 
     Long registerUser(UserSaveRequestDto dto);
