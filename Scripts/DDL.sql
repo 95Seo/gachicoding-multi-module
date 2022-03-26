@@ -22,7 +22,7 @@ CREATE TABLE `gachicoding`.`user`
     `password`       VARCHAR(255)        NOT NULL COMMENT '비밀번호',                    -- 비밀번호
     `regdate`        DATETIME            NOT NULL DEFAULT now() COMMENT '생성일자',      -- 생성일자
     `activated`      BOOLEAN             NOT NULL DEFAULT true COMMENT '활성상태',       -- 활성상태
-    `role`           VARCHAR(15)         NOT NULL DEFAULT 'ROLE_GUEST' COMMENT '권한', -- 권한
+    `role`           VARCHAR(15)         NOT NULL DEFAULT 'GUEST' COMMENT '권한', -- 권한
     `authentication` BOOLEAN             NOT NULL DEFAULT false COMMENT '인증여부'       -- 인증여부
 )
     COMMENT '유저';
