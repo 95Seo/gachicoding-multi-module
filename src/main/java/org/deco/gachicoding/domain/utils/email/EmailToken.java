@@ -3,20 +3,20 @@ package org.deco.gachicoding.domain.utils.email;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ConfirmationToken {
+@DynamicInsert
+@Table(name = "email_token")
+public class EmailToken {
 
     private static final long EMAIL_TOKEN_EXPIRATION_TIME_VALUE = 5L;
 
@@ -24,7 +24,7 @@ public class ConfirmationToken {
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(length = 36)    // 토큰의 PK 값
-    private String id;
+    private String token;
 
     @Column     // 만료 시간
     private LocalDateTime expirationDate;
@@ -38,18 +38,18 @@ public class ConfirmationToken {
 
     @CreatedDate
     @Column(updatable = false)  // 생성 시간
-    private LocalDateTime createDate;
+    private LocalDateTime regdate;
 
-    @LastModifiedDate           // 마지막 변경 시간
-    private LocalDateTime lastModifiedDate;
+//    @LastModifiedDate           // 마지막 변경 시간
+//    private LocalDateTime lastModifiedDate;
 
     /**
      * 이메일 인증 토큰 생성
      * @param email
      * @return
      */
-    public static ConfirmationToken createEmailConfirmationToken(String email) {
-        ConfirmationToken confirmationToken = new ConfirmationToken();
+    public static EmailToken createEmailConfirmationToken(String email) {
+        EmailToken confirmationToken = new EmailToken();
         confirmationToken.expirationDate = LocalDateTime.now().plusMonths(EMAIL_TOKEN_EXPIRATION_TIME_VALUE); // 5분후 만료
         confirmationToken.email = email;
         confirmationToken.expired = false;

@@ -1,17 +1,23 @@
 package org.deco.gachicoding.service.user;
 
+import org.deco.gachicoding.domain.social.SocialAuth;
 import org.deco.gachicoding.domain.user.User;
-import org.deco.gachicoding.dto.user.UserResponseDto;
-import org.deco.gachicoding.dto.user.UserSaveRequestDto;
-import org.deco.gachicoding.dto.user.UserUpdateResponseDto;
+import org.deco.gachicoding.dto.jwt.JwtRequestDto;
+import org.deco.gachicoding.dto.jwt.JwtResponseDto;
+import org.deco.gachicoding.dto.social.SocialSaveRequestDto;
+import org.deco.gachicoding.dto.user.*;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public interface UserService {
 
-    User getUserByEmail(String email);
+    Optional<User> getUserByEmail(String email);
 
     UserResponseDto getUser(Long idx);
+
+    JwtResponseDto login(JwtRequestDto request);
 
     Long registerUser(UserSaveRequestDto dto);
 
@@ -20,6 +26,5 @@ public interface UserService {
     Long updateUser(Long idx, UserUpdateResponseDto dto);
 
     Long deleteUser(Long idx);
-
 
 }

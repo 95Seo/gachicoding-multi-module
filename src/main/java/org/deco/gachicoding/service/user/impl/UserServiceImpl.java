@@ -1,28 +1,45 @@
 package org.deco.gachicoding.service.user.impl;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
-import org.deco.gachicoding.domain.user.User;
-import org.deco.gachicoding.domain.user.UserRepository;
-import org.deco.gachicoding.domain.utils.email.ConfirmationToken;
-import org.deco.gachicoding.dto.user.UserResponseDto;
-import org.deco.gachicoding.dto.user.UserSaveRequestDto;
-import org.deco.gachicoding.dto.user.UserUpdateResponseDto;
+import org.deco.gachicoding.config.jwt.JwtTokenProvider;
+import org.deco.gachicoding.domain.social.SocialAuth;
+import org.deco.gachicoding.domain.social.SocialAuthRepository;
+import org.deco.gachicoding.domain.user.*;
+import org.deco.gachicoding.domain.utils.email.EmailToken;
+import org.deco.gachicoding.dto.jwt.JwtRequestDto;
+import org.deco.gachicoding.dto.jwt.JwtResponseDto;
+import org.deco.gachicoding.dto.social.SocialSaveRequestDto;
+import org.deco.gachicoding.dto.user.*;
 import org.deco.gachicoding.service.user.UserService;
-import org.deco.gachicoding.service.email.ConfirmationTokenService;
+import org.deco.gachicoding.service.email.EmailTokenService;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final ConfirmationTokenService confirmationTokenService;
+    private final EmailTokenService confirmationTokenService;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
     @Override
-    public User getUserByEmail(String email) {
+    public Optional<User> getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
@@ -38,13 +55,42 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public Long registerUser(UserSaveRequestDto dto) {
-        System.out.println("User Save 수행");
-        Long idx = userRepository.save(dto.toEntity()).getIdx();
+    public JwtResponseDto login(JwtRequestDto request) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+            return createJwtToken(authentication);
+            // BadCredentialsException - 스프링 시큐리티 에서 아이디 또는 비밀번호가 틀렸을 경우 나오는 예외
+        } catch (BadCredentialsException e) {
+            e.printStackTrace();
+            return new JwtResponseDto("아이디 또는 비밀번호를 확인해 주세요.");
+        }
+    }
 
-        // 이메일 인증 기능 분리 필요
-        confirmationTokenService.createEmailConfirmationToken(dto.getEmail());
-        return idx;
+    private JwtResponseDto createJwtToken(Authentication authentication) {
+        UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
+        String token = jwtTokenProvider.generateToken(principal);
+        return new JwtResponseDto(token);
+    }
+
+    @Override
+    public Long registerUser(UserSaveRequestDto dto) {
+
+        dto.encryptPassword(passwordEncoder);
+
+        if(getUserByEmail(dto.getEmail()).isEmpty()) {
+            System.out.println("User Save 수행");
+
+            Long idx = userRepository.save(dto.toEntity()).getIdx();
+
+            // 이메일 인증 기능 분리 필요
+            confirmationTokenService.createEmailConfirmationToken(dto.getEmail());
+
+            return idx;
+        } else {
+            System.out.println(dto.getEmail() + " : User Save 실패\n 중복된 아이디 입니다.");
+            return Long.valueOf(-100);
+        }
     }
 
     /**
@@ -54,8 +100,8 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void confirmEmail(String token) {
-        ConfirmationToken findConfirmationToken = confirmationTokenService.findByIdExpirationDateAfterAndExpired(token);
-        User findUserInfo = getUserByEmail(findConfirmationToken.getEmail());
+        EmailToken findConfirmationToken = confirmationTokenService.findByIdExpirationDateAfterAndExpired(token);
+        Optional<User> findUserInfo = getUserByEmail(findConfirmationToken.getEmail());
         findConfirmationToken.useToken();   // 토큰 만료 로직을 구현해주면 된다. ex) expired 값을 true 로 변경
 //        findUserInfo.emailVerifiedSuccess();    // 유저의 이메일 인증 값 변경 로직을 구현해 주면 된다. ex) emailVerified 값을 true로 변경
     }
@@ -78,4 +124,5 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(idx);
         return idx;
     }
+
 }
