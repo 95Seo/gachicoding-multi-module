@@ -2,33 +2,34 @@ package org.deco.gachicoding.dto.user;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.deco.gachicoding.domain.user.UserRole;
 import org.deco.gachicoding.domain.user.User;
+import org.deco.gachicoding.domain.user.UserRole;
 
 import java.time.LocalDateTime;
 
-@Setter
 @Getter
 @NoArgsConstructor
 public class UserResponseDto {
 
-    private Long idx;
-    private String name;
-    private String email;
-    private String password;
-    private LocalDateTime regdate;
-    private int activated;
-    private UserRole role;
+    private String userName;
+    private String userNick;
+    private String userEmail;
+    private String userPassword;
+    private LocalDateTime userRegdate;
+    private int userActivated;
+    private boolean userAuth;
+    private String userPicture;
+    private UserRole userRole;
 
     public UserResponseDto(User user) {
-        this.idx = user.getIdx();
-        this.name = user.getName();
-        this.email = user.getEmail();
-        this.password = user.getPassword();
-        this.regdate = user.getRegdate();
-        this.activated = user.getActivated();
-        this.role = user.getRole();
+        this.userName = user.getUserName();
+        this.userNick = user.getUserNick();
+        this.userEmail = user.getUserEmail();
+        this.userPassword = user.getUserPassword();
+        this.userRegdate = user.getUserRegdate();
+        this.userActivated = user.getUserActivated();
+        this.userAuth = user.isUserAuth();
+        this.userPicture = user.getUserPicture();
+        this.userRole = user.getUserRole();
     }
-
 }

@@ -1,8 +1,6 @@
 package org.deco.gachicoding.service.email;
 
 import lombok.RequiredArgsConstructor;
-import org.deco.gachicoding.domain.utils.email.ConfirmationToken;
-import org.deco.gachicoding.domain.utils.email.ConfirmationTokenRepository;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;

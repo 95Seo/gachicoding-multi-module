@@ -1,8 +1,6 @@
 package org.deco.gachicoding.controller;
 
 import org.deco.gachicoding.config.jwt.JwtTokenProvider;
-import org.deco.gachicoding.dto.user.UserSaveRequestDto;
-import org.deco.gachicoding.service.user.UserService;
 import org.deco.gachicoding.service.user.impl.UserServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -53,12 +53,9 @@ public class User {
     }
 
     // 유저 정보 업데이트 이메일 수정이 가능한게 맞을까?
-    public User update(String userName, String userNick, String userEmail /*이메일 수정 생각해보기*/, String userPassword, LocalDateTime userRegdate, int userActivated, boolean userAuth, String userPicture, UserRole userRole) {
-        this.userName = userName;
+    public User update(String userNick, String userPassword, int userActivated, boolean userAuth, String userPicture, UserRole userRole) {
         this.userNick = userNick;
-        this.userEmail = userEmail;
         this.userPassword = userPassword;
-        this.userRegdate = userRegdate;
         this.userActivated = userActivated;
         this.userAuth = userAuth;
         this.userPicture = userPicture;

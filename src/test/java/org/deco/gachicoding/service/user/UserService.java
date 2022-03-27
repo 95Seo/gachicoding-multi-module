@@ -2,7 +2,10 @@ package org.deco.gachicoding.service.user;
 
 
 import org.deco.gachicoding.domain.user.User;
-import org.deco.gachicoding.dto.user.*;
+import org.deco.gachicoding.dto.user.JwtRequestDto;
+import org.deco.gachicoding.dto.user.JwtResponseDto;
+import org.deco.gachicoding.dto.user.UserSaveRequestDto;
+import org.deco.gachicoding.dto.user.UserUpdateRequestDto;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -21,7 +24,7 @@ public interface UserService {
 
     void confirmEmail(String token);
 
-    Long updateUser(Long idx, UserUpdateResponseDto dto);
+    Long updateUser(Long idx, UserUpdateRequestDto dto);
 
     Long deleteUser(Long idx);
 

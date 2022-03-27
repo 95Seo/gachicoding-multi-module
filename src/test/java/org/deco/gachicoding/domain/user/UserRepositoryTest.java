@@ -117,7 +117,7 @@ public class UserRepositoryTest {
         int updateAct = 0;
         UserRole updateRole = UserRole.GUEST;
 
-        user.update(updateName,updateEmail,updatePassword, updateAct, updateRole);
+        user.update(updateName, updateEmail, updatePassword, updateAct, updateRole);
 
         assertEquals(updateName, userRepository.findById(idx).get().getName());
         assertEquals(updateEmail, userRepository.findById(idx).get().getEmail());

@@ -5,8 +5,13 @@ import org.deco.gachicoding.config.jwt.JwtTokenProvider;
 import org.deco.gachicoding.domain.user.User;
 import org.deco.gachicoding.domain.user.UserRepository;
 import org.deco.gachicoding.domain.utils.email.ConfirmationToken;
-import org.deco.gachicoding.dto.user.*;
+import org.deco.gachicoding.domain.utils.email.EmailToken;
+import org.deco.gachicoding.dto.user.JwtRequestDto;
+import org.deco.gachicoding.dto.user.JwtResponseDto;
+import org.deco.gachicoding.dto.user.UserSaveRequestDto;
+import org.deco.gachicoding.dto.user.UserUpdateRequestDto;
 import org.deco.gachicoding.service.email.ConfirmationTokenService;
+import org.deco.gachicoding.service.email.EmailTokenService;
 import org.deco.gachicoding.service.user.UserService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -23,7 +28,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final ConfirmationTokenService confirmationTokenService;
+    private final EmailTokenService emailTokenService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
@@ -39,8 +44,8 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public Optional<User> getUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public Optional<User> getUserByEmail(String userEmail) {
+        return userRepository.findByUserEmail(userEmail);
     }
 
     @Transactional
@@ -94,7 +99,6 @@ public class UserServiceImpl implements UserService {
         */
 
 
-
         // 이메일 중복 체크
         // 비밀번호 변조
         // 유저 이메일로 인증 메일 보내기
@@ -113,7 +117,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void confirmEmail(String token) {
-        ConfirmationToken findConfirmationToken = confirmationTokenService.findByIdExpirationDateAfterAndExpired(token);
+        EmailToken findConfirmationToken = emailTokenService.findByIdExpirationDateAfterAndExpired(token);
         Optional<User> findUserInfo = getUserByEmail(findConfirmationToken.getEmail());
         findConfirmationToken.useToken();   // 토큰 만료 로직을 구현해주면 된다. ex) expired 값을 true 로 변경
 //        findUserInfo.emailVerifiedSuccess();    // 유저의 이메일 인증 값 변경 로직을 구현해 주면 된다. ex) emailVerified 값을 true로 변경
@@ -121,13 +125,12 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public Long updateUser(Long idx, UserUpdateResponseDto dto) {
+    public Long updateUser(Long idx, UserUpdateRequestDto dto) {
 
         User user = userRepository.findById(idx)
                 .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다. 회원 번호 = " + idx));
 
-        user.update(user.getUserName(),user.getUserNick(),user.getUserEmail(),user.getUserPassword()
-                ,user.getUserRegdate(),user.getUserActivated(), user.isUserAuth(), user.getUserPicture(),user.getUserRole());
+        user.update();
 
         return idx;
     }
