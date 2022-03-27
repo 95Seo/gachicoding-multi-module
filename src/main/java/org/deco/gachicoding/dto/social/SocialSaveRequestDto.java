@@ -1,14 +1,10 @@
-package org.deco.gachicoding.dto.user;
+package org.deco.gachicoding.dto.social;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.deco.gachicoding.domain.user.SocialAuth;
-import org.deco.gachicoding.domain.user.User;
-import org.springframework.lang.Nullable;
-
-import javax.validation.constraints.Email;
+import org.deco.gachicoding.domain.social.SocialAuth;
 
 @Getter
 @Setter

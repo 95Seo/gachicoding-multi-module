@@ -1,4 +1,4 @@
-package org.deco.gachicoding.domain.user;
+package org.deco.gachicoding.domain.social;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

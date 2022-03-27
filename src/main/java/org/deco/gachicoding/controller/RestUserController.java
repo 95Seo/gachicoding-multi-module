@@ -2,9 +2,12 @@ package org.deco.gachicoding.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.deco.gachicoding.domain.user.Role;
-import org.deco.gachicoding.domain.user.SocialAuth;
 import org.deco.gachicoding.domain.user.User;
+import org.deco.gachicoding.dto.jwt.JwtRequestDto;
+import org.deco.gachicoding.dto.jwt.JwtResponseDto;
+import org.deco.gachicoding.dto.social.SocialSaveRequestDto;
 import org.deco.gachicoding.dto.user.*;
+import org.deco.gachicoding.service.social.SocialService;
 import org.deco.gachicoding.service.user.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +20,8 @@ import java.util.Optional;
 public class RestUserController {
 
     private final UserService userService;
+
+    private final SocialService socialService;
 
     @PostMapping("/user/login")
     public JwtResponseDto login(@RequestBody JwtRequestDto dto) throws Exception {
@@ -43,19 +48,24 @@ public class RestUserController {
         return userService.deleteUser(idx);
     }
 
-    @GetMapping("/user/kakao")
-    public String kakaoUserLogin(String code) throws Exception {
+    @GetMapping("/user/kakaoLogin")
+    public JwtResponseDto kakaoUserLogin(String code) throws Exception {
         System.out.println("kakaoCode" + code);
 
         Long idx;
 
-        String accessToken = userService.getKakaoAccessToken(code);
-        SocialSaveRequestDto socialSaveRequestDto = userService.getKakaoUserInfo(accessToken);
+        String accessToken = socialService.getKakaoAccessToken(code);
+        SocialSaveRequestDto socialSaveRequestDto = socialService.getKakaoUserInfo(accessToken);
+
+        // 회원 확인
+        Optional<User> user = userService.getUserByEmail(socialSaveRequestDto.getSocial_id());
+
+        JwtRequestDto jwtRequestDto = new JwtRequestDto();
+
+        jwtRequestDto.setEmail(socialSaveRequestDto.getSocial_id());
 
         // 카카오 소셜 인증이 없으면
-        if(userService.getSocialTypeAndEmail(socialSaveRequestDto).isEmpty()) {
-            // 회원 확인
-            Optional<User> user = userService.getUserByEmail(socialSaveRequestDto.getSocial_id());
+        if(socialService.getSocialTypeAndEmail(socialSaveRequestDto).isEmpty()) {
 
             // 같은 이메일로 가입된 회원이 없으면
             if (user.isEmpty()) {
@@ -69,22 +79,28 @@ public class RestUserController {
 
                 idx = userService.registerUser(userSaveRequestDto);
 
+                jwtRequestDto.setPassword("a123456789a");
+
                 System.out.println("신규 유저 소셜 회원 가입 + 로그인 입니다.");
             } else {
                 idx = user.get().getIdx();
+
+                jwtRequestDto.setPassword(user.get().getPassword());
 
                 System.out.println("기존 유저 소셜 인증 + 로그인 입니다.");
             }
             // 유저 idx를 몰랐기 때문에 지금 set
             socialSaveRequestDto.setUser_idx(idx);
-            userService.registerSocial(socialSaveRequestDto);
+            socialService.registerSocial(socialSaveRequestDto);
         } 
         // 있으면 로그인 처리(이메일 만을 사용해야함)
         else {
-            System.out.println("기존 회원 로그인 입니다.");
+            jwtRequestDto.setPassword(user.get().getPassword());
+            System.out.println("기존 회원 로그인 입니다." + user.get().getPassword());
         }
 
-        return "카카오 로그인 입니다.";
+        // => email - socialId, password - 유저 검색을 통해 알아야함
+        return userService.login(jwtRequestDto);
     }
 
 }

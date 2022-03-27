@@ -1,9 +1,11 @@
 package org.deco.gachicoding.service.user;
 
-import org.deco.gachicoding.domain.user.SocialAuth;
+import org.deco.gachicoding.domain.social.SocialAuth;
 import org.deco.gachicoding.domain.user.User;
+import org.deco.gachicoding.dto.jwt.JwtRequestDto;
+import org.deco.gachicoding.dto.jwt.JwtResponseDto;
+import org.deco.gachicoding.dto.social.SocialSaveRequestDto;
 import org.deco.gachicoding.dto.user.*;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -19,18 +21,10 @@ public interface UserService {
 
     Long registerUser(UserSaveRequestDto dto);
 
-    Long registerSocial(SocialSaveRequestDto dto);
-
-    Optional<SocialAuth> getSocialTypeAndEmail(SocialSaveRequestDto dto);
-
     void confirmEmail(String token);
 
     Long updateUser(Long idx, UserUpdateResponseDto dto);
 
     Long deleteUser(Long idx);
-
-    String getKakaoAccessToken(String code);
-
-    SocialSaveRequestDto getKakaoUserInfo(String token) throws Exception;
 
 }

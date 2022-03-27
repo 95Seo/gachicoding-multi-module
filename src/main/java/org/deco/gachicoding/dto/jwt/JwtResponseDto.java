@@ -1,4 +1,4 @@
-package org.deco.gachicoding.dto.user;
+package org.deco.gachicoding.dto.jwt;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

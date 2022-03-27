@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.deco.gachicoding.domain.user.Role;
-import org.deco.gachicoding.domain.user.SocialAuth;
 import org.deco.gachicoding.domain.user.User;
 import org.springframework.lang.Nullable;
 import org.springframework.security.crypto.password.PasswordEncoder;

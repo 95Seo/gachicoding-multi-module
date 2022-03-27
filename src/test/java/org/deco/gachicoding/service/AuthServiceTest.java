@@ -1,7 +1,7 @@
 package org.deco.gachicoding.service;
 
-import org.deco.gachicoding.dto.user.JwtRequestDto;
-import org.deco.gachicoding.dto.user.JwtResponseDto;
+import org.deco.gachicoding.dto.jwt.JwtRequestDto;
+import org.deco.gachicoding.dto.jwt.JwtResponseDto;
 import org.deco.gachicoding.dto.user.UserResponseDto;
 import org.deco.gachicoding.dto.user.UserSaveRequestDto;
 import org.deco.gachicoding.service.user.UserService;
@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
