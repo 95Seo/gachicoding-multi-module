@@ -2,8 +2,8 @@ package org.deco.gachicoding.service.user;
 
 
 import org.deco.gachicoding.domain.user.User;
-import org.deco.gachicoding.dto.user.JwtRequestDto;
-import org.deco.gachicoding.dto.user.JwtResponseDto;
+import org.deco.gachicoding.dto.jwt.JwtRequestDto;
+import org.deco.gachicoding.dto.jwt.JwtResponseDto;
 import org.deco.gachicoding.dto.user.UserSaveRequestDto;
 import org.deco.gachicoding.dto.user.UserUpdateRequestDto;
 import org.springframework.stereotype.Service;
