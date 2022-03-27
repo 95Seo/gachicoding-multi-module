@@ -8,6 +8,7 @@ import org.deco.gachicoding.dto.jwt.JwtResponseDto;
 import org.deco.gachicoding.dto.social.SocialSaveRequestDto;
 import org.deco.gachicoding.dto.user.UserResponseDto;
 import org.deco.gachicoding.dto.user.UserSaveRequestDto;
+import org.deco.gachicoding.dto.user.UserUpdateRequestDto;
 import org.deco.gachicoding.dto.user.UserUpdateResponseDto;
 import org.deco.gachicoding.service.social.SocialService;
 import org.deco.gachicoding.service.user.UserService;
@@ -41,7 +42,7 @@ public class RestUserController {
     }
 
     @PutMapping("/user/{idx}")
-    public Long updateUser(@PathVariable Long idx,@RequestBody UserUpdateResponseDto dto){
+    public Long updateUser(@PathVariable Long idx, @RequestBody UserUpdateRequestDto dto){
         return userService.updateUser(idx, dto);
     }
 

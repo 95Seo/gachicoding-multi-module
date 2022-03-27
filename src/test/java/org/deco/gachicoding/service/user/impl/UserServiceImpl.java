@@ -4,14 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.deco.gachicoding.config.jwt.JwtTokenProvider;
 import org.deco.gachicoding.domain.user.User;
 import org.deco.gachicoding.domain.user.UserRepository;
-import org.deco.gachicoding.domain.utils.email.ConfirmationToken;
 import org.deco.gachicoding.domain.utils.auth.Auth;
 import org.deco.gachicoding.dto.user.JwtRequestDto;
 import org.deco.gachicoding.dto.user.JwtResponseDto;
 import org.deco.gachicoding.dto.user.UserSaveRequestDto;
 import org.deco.gachicoding.dto.user.UserUpdateRequestDto;
 import org.deco.gachicoding.service.email.AuthService;
-import org.deco.gachicoding.service.email.EmailTokenService;
 import org.deco.gachicoding.service.user.UserService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -125,8 +123,9 @@ public class UserServiceImpl implements UserService {
     /**
      * 이메일 인증 로직
      *
-     * @param token
+     * @param authEmail
      */
+
     @Transactional
     @Override
     public void confirmEmail(String authEmail) {
