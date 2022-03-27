@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
 
-//    @Transactional
+    //    @Transactional
     @Override
     public boolean existDuplicateEmail(String email) {
 
@@ -93,7 +93,16 @@ public class UserServiceImpl implements UserService {
         }
         */
 
-        return (long) -1;
+
+
+        // 이메일 중복 체크
+        // 비밀번호 변조
+        // 유저 이메일로 인증 메일 보내기
+
+
+        Long idx = userRepository.save(dto.toEntity()).getUserIdx();
+
+        return idx;
     }
 
     /**
@@ -117,7 +126,8 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(idx)
                 .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다. 회원 번호 = " + idx));
 
-        user.update(dto.getName(), dto.getEmail(), dto.getPassword(), dto.getActivated(), dto.getRole());
+        user.update(user.getUserName(),user.getUserNick(),user.getUserEmail(),user.getUserPassword()
+                ,user.getUserRegdate(),user.getUserActivated(), user.isUserAuth(), user.getUserPicture(),user.getUserRole());
 
         return idx;
     }

@@ -6,7 +6,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -56,7 +55,7 @@ public class UserRepositoryTest {
         String password = "gachi1234";
         LocalDateTime regdate = LocalDateTime.now();
         int activated = 1;
-        Role role = Role.USER;
+        UserRole role = UserRole.USER;
 
         User entity = User.builder()
                 .name(name)
@@ -68,15 +67,15 @@ public class UserRepositoryTest {
                 .build();
 
 
-        Long idx = userRepository.save(entity).getIdx();
+        Long idx = userRepository.save(entity).getUserIdx();
         User user = userRepository.findById(idx).get();
 
-        assertEquals(name, user.getName());
-        assertEquals(email, user.getEmail());
-        assertEquals(password, user.getPassword());
-        assertEquals(regdate, user.getRegdate());
-        assertEquals(activated, user.getActivated());
-        assertEquals(role, user.getRole());
+        assertEquals(name, user.getUserName());
+        assertEquals(email, user.getUserEmail());
+        assertEquals(password, user.getUserPassword());
+        assertEquals(regdate, user.getUserRegdate());
+        assertEquals(activated, user.getUserActivated());
+        assertEquals(role, user.getUserRole());
     }
 
     @Test
@@ -98,7 +97,7 @@ public class UserRepositoryTest {
         String password = "gachi1234";
         LocalDateTime regdate = LocalDateTime.now();
         int activated = 1;
-        Role role = Role.USER;
+        UserRole role = UserRole.USER;
 
         User entity = User.builder()
                 .name(name)
@@ -116,7 +115,7 @@ public class UserRepositoryTest {
         String updateEmail = "수정된 메일";
         String updatePassword = "수정된 비밀번호";
         int updateAct = 0;
-        Role updateRole = Role.GUEST;
+        UserRole updateRole = UserRole.GUEST;
 
         user.update(updateName,updateEmail,updatePassword, updateAct, updateRole);
 

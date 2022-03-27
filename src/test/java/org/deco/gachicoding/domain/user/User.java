@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
-import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -18,40 +17,52 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idx;
+    private Long userIdx;
 
-    private String name;
-    private String email;
-    private String password;
-    private LocalDateTime regdate;
-    private int activated;
+    private String userName;
+    private String userNick;
+    private String userEmail;
+    private String userPassword;
+    private LocalDateTime userRegdate;
+    private int userActivated;
+    private boolean userAuth;
+    private String userPicture;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private UserRole userRole;
+
 
     @Builder
-    public User(Long idx, String name, String email, String password, LocalDateTime regdate, int activated, Role role) {
-        this.idx = idx;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.regdate = regdate;
-        this.activated = activated;
-        this.role = role;
+    public User(String userName, String userNick, String userEmail, String userPassword, LocalDateTime userRegdate, int userActivated, boolean userAuth, String userPicture, UserRole userRole) {
+        this.userName = userName;
+        this.userNick = userNick;
+        this.userEmail = userEmail;
+        this.userPassword = userPassword;
+        this.userRegdate = userRegdate;
+        this.userActivated = userActivated;
+        this.userAuth = userAuth;
+        this.userPicture = userPicture;
+        this.userRole = userRole;
     }
 
-    public User socialUpdate(String name, String email) {
-        this.name = name;
-        this.email = email;
+    // 소셜 로그인 시 업데이트 되는 정보, 수정 필요
+    public User socialUpdate(String userName, String userEmail) {
+        this.userName = userName;
+        this.userEmail = userEmail;
         return this;
     }
 
-    public User update(String name, String email, String password, int activated, Role role) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.activated = activated;
-        this.role = role;
+    // 유저 정보 업데이트 이메일 수정이 가능한게 맞을까?
+    public User update(String userName, String userNick, String userEmail /*이메일 수정 생각해보기*/, String userPassword, LocalDateTime userRegdate, int userActivated, boolean userAuth, String userPicture, UserRole userRole) {
+        this.userName = userName;
+        this.userNick = userNick;
+        this.userEmail = userEmail;
+        this.userPassword = userPassword;
+        this.userRegdate = userRegdate;
+        this.userActivated = userActivated;
+        this.userAuth = userAuth;
+        this.userPicture = userPicture;
+        this.userRole = userRole;
         return this;
     }
 }

@@ -3,7 +3,7 @@ package org.deco.gachicoding.dto.user;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.deco.gachicoding.domain.user.Role;
+import org.deco.gachicoding.domain.user.UserRole;
 import org.deco.gachicoding.domain.user.User;
 
 import java.time.LocalDateTime;
@@ -19,7 +19,7 @@ public class UserResponseDto {
     private String password;
     private LocalDateTime regdate;
     private int activated;
-    private Role role;
+    private UserRole role;
 
     public UserResponseDto(User user) {
         this.idx = user.getIdx();
