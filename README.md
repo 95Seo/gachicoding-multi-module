@@ -47,4 +47,8 @@
 <br>
 
 ## 트러블 슈팅
-* [AWS Access Denied]() - IAM 계정으로 로그인 시 접근이 안되는 현상(작성 전)
+* [AWS Access Denied]() - IAM 계정으로 로그인 시 RDS 접근이 안되는 현상(작성 전)
+* [Spring Security & OAuth2]() - 소셜 로그인 시, 기존의 일반 회원과 중복되는 아이디일 경우 로그인 연동(구글, 카카오, 깃허브) 처리(작성 전)
+* [Spring Data JPA]() - not null 칼럼의 DynamicInsert,DynamicUpdate 어노테이션(작성 전)
+* [CORS]() - CORS 정책 위반과 이를 해결화는 정확한 방법(작성 전)
+* [UnexpectedRollbackException]() - 회원 가입 시 아이디(이메일) 중복처리에서 @Transactional 에 의한 롤백 예외 발생(작성 전)
