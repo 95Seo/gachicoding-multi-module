@@ -7,9 +7,9 @@ import org.deco.gachicoding.domain.user.UserRepository;
 import org.deco.gachicoding.domain.utils.auth.Auth;
 import org.deco.gachicoding.dto.jwt.JwtRequestDto;
 import org.deco.gachicoding.dto.jwt.JwtResponseDto;
+import org.deco.gachicoding.service.email.AuthService;
 import org.deco.gachicoding.dto.user.UserSaveRequestDto;
 import org.deco.gachicoding.dto.user.UserUpdateRequestDto;
-import org.deco.gachicoding.service.email.AuthService;
 import org.deco.gachicoding.service.user.UserService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,12 +35,12 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public boolean isDuplicateEmail(String userEmail) {
-        return getUserByEmail(userEmail).isPresent();
+        return getUserByUserEmail(userEmail).isPresent();
     }
 
     @Transactional
     @Override
-    public Optional<User> getUserByEmail(String userEmail) {
+    public Optional<User> getUserByUserEmail(String userEmail) {
         return userRepository.findByUserEmail(userEmail);
     }
 
@@ -72,28 +72,8 @@ public class UserServiceImpl implements UserService {
     // 에러 발생 - 이와 관련해선 좀 딥한 부분인거 같아서 공부를 좀 더 해야할 거 같음 + 트러블 슈팅으로 넣으면 좋을 듯
     // @Transactional 사용도 신중해야 할 필요가 있을 듯
 
-
     @Override
     public Long registerUser(UserSaveRequestDto dto) throws DataIntegrityViolationException {
-
-        /*
-        dto.encryptPassword(passwordEncoder);
-
-        if (getUserByEmail(dto.getEmail()).get() == null) {
-            System.out.println("User Save 수행");
-
-            Long idx = userRepository.save(dto.toEntity()).getIdx();
-
-            // 이메일 인증 기능 분리 필요
-            confirmationTokenService.createEmailConfirmationToken(dto.getEmail());
-
-            return idx;
-        } else {
-            System.out.println(dto.getEmail() + " : User Save 실패\n 중복된 아이디 입니다.");
-            return Long.valueOf(-100);
-        }
-        */
-
 
         // 이메일 중복 체크
         String registerEmail = dto.getUserEmail();
@@ -102,9 +82,11 @@ public class UserServiceImpl implements UserService {
             throw new DataIntegrityViolationException("중복된 이메일 입니다.");
 
         // 비밀번호 변조
+        dto.encryptPassword(passwordEncoder);
 
         // 유저 저장
         Long userIdx = userRepository.save(dto.toEntity()).getUserIdx();
+
         // 유저 이메일로 인증 메일 보내기
 
         return userIdx;
@@ -134,7 +116,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void confirmEmail(String authEmail) {
         Auth auth = authService.getTokenByAuthEmail(authEmail);
-        Optional<User> findUserInfo = getUserByEmail(auth.getAuthEmail());
+        Optional<User> findUserInfo = getUserByUserEmail(auth.getAuthEmail());
 //        auth.useToken();   // 토큰 만료 로직을 구현해주면 된다. ex) expired 값을 true 로 변경
 //        findUserInfo.emailVerifiedSuccess();    // 유저의 이메일 인증 값 변경 로직을 구현해 주면 된다. ex) emailVerified 값을 true로 변경
     }

@@ -16,7 +16,7 @@ public interface UserService {
     // 이메일 중복 체크
     boolean isDuplicateEmail(String email);
 
-    Optional<User> getUserByEmail(String email);
+    Optional<User> getUserByUserEmail(String email);
 
     JwtResponseDto login(JwtRequestDto request);
 

@@ -25,7 +25,7 @@ public class UserServiceTest2 {
     UserService userService;
 
     @Autowired
-    UserRepository userRepository; // DB 초기화 위한
+    UserRepository userRepository;
 
     @AfterEach
     void cleanUp() {
@@ -34,16 +34,17 @@ public class UserServiceTest2 {
 
     @Test
     void 이메일로_유저정보_가져오기_해당유저존재() {
+
         createUserMock("테스트", "테스트별명", "test@test.com", "1234");
-        String userEmail = "test@test.com";
-        Optional<User> user = userService.getUserByEmail(userEmail);
+
+        Optional<User> user = userService.getUserByUserEmail("test@test.com");
         assertTrue(user.isPresent());
     }
 
     @Test
     void 이메일로_유저정보_가져오기_해당유저없음() {
-        String email = "inhan1009@naver.com";
-        Optional<User> user = userService.getUserByEmail(email);
+
+        Optional<User> user = userService.getUserByUserEmail("inhan1009@naver.com");
         assertTrue(user.isEmpty());
     }
 
@@ -58,36 +59,32 @@ public class UserServiceTest2 {
     @Test
     void 중복이메일_존재하지_않음() {
 
-        String email = "inhan1009@naver.com";
-        assertFalse(userService.isDuplicateEmail(email));
+        assertFalse(userService.isDuplicateEmail("inhan1009@naver.com"));
     }
 
     @Test
     void 회원가입_성공() {
 
-        String userEmail = "test@test.com";
-        String userName = "테스트";
-        String userNick = "테스트별명";
-        String userPassword = "1234";
+        createUserMock("테스트", "테스트별명", "test@test.com", "1234");
 
-        createUserMock(userName, userNick, userEmail, userPassword);
+        Optional<User> user = userService.getUserByUserEmail("test@test.com");
 
-        Optional<User> user = userService.getUserByEmail(userEmail);
-
-        assertEquals(userName, user.get().getUserName());
-        assertEquals(userNick, user.get().getUserNick());
-        assertEquals(userEmail, user.get().getUserEmail());
-        assertEquals(userPassword, user.get().getUserPassword());
+        assertEquals("테스트", user.get().getUserName());
+        assertEquals("테스트별명", user.get().getUserNick());
+        assertEquals("test@test.com", user.get().getUserEmail());
+        assertEquals("1234", user.get().getUserPassword());
     }
 
     @Test
     void 회원가입_실패_이메일_중복인_경우() {
 
-        // 첫 이메일
+        // 회원가입
         createUserMock("테스트", "테스트별명", "test@test.com", "1234");
 
+        // 중복된 이메일로 회원가입 할 경우 예외발생하는지 체크
         assertThrows(DataIntegrityViolationException.class, () -> {
-            // 중복된 이메일로 회원가입 시도
+
+            // 이미 등록된 이메일로 한번 더 회원가입
             createUserMock("테스트", "테스트별명", "test@test.com", "1234");
         });
 

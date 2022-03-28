@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -30,8 +31,31 @@ public class UserRepositoryTest {
     @Autowired
     UserRepository userRepository;
 
+    private Long createUserMock(String userName, String userNick, String userEmail, String userPassword) {
+        User entity = User.builder()
+                .userName(userName)
+                .userNick(userNick)
+                .userEmail(userEmail)
+                .userPassword(userPassword)
+                .build();
+
+        return userRepository.save(entity).getUserIdx();
+    }
+
+    @Test
+    public void 인덱스로_유저조회() {
+
+        Long userIdx = createUserMock("테스트", "테스트 별명", "test@test.com", "1234");
+
+        Optional<User> user = userRepository.findById(userIdx);
+        assertEquals("test@test.com", user.get().getUserEmail());
+        assertEquals("테스트", user.get().getUserName());
+    }
+
     @Test
     public void 이메일로_유저조회() {
+
+        createUserMock("테스트", "테스트 별명", "test@test.com", "1234");
 
         Optional<User> user = userRepository.findByUserEmail("test@test.com");
 
@@ -40,51 +64,48 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void 인덱스로_유저조회() {
-        Long idx = (long) 1;
-        Optional<User> user = userRepository.findById(idx);
-        assertEquals("test@test.com", user.get().getUserEmail());
-        assertEquals("테스트", user.get().getUserName());
+    public void 닉네임으로_유저조회() {
+        Long userIdx = createUserMock("테스트", "테스트 별명", "test@test.com", "1234");
+
+        Optional<User> findUser = userRepository.findByUserNick("테스트 별명");
+        Optional<User> createUser = userRepository.findById(userIdx);
+        assertEquals(createUser, findUser);
     }
 
     @Test
     public void 유저_저장() {
 
-        String name = "가치코딩";
-        String email = "gachicoding@gachicoding.com";
-        String password = "gachi1234";
-        LocalDateTime regdate = LocalDateTime.now();
-        int activated = 1;
-        UserRole role = UserRole.USER;
+        String userName = "가치코딩";
+        String userNick = "가치코코코딩";
+        String userEmail = "gachicoding@gachicoding.com";
+        String userPassword = "gachi1234";
 
         User entity = User.builder()
-                .userName(name)
-                .userEmail(email)
-                .userPassword(password)
-                .userRegdate(regdate)
-                .userActivated(activated)
-                .userRole(role)
+                .userName(userName)
+                .userNick(userNick)
+                .userEmail(userEmail)
+                .userPassword(userPassword)
                 .build();
 
 
-        Long idx = userRepository.save(entity).getUserIdx();
-        User user = userRepository.findById(idx).get();
+        Long userIdx = userRepository.save(entity).getUserIdx();
+        User user = userRepository.findById(userIdx).get();
 
-        assertEquals(name, user.getUserName());
-        assertEquals(email, user.getUserEmail());
-        assertEquals(password, user.getUserPassword());
-        assertEquals(regdate, user.getUserRegdate());
-        assertEquals(activated, user.getUserActivated());
-        assertEquals(role, user.getUserRole());
+        assertEquals(entity, user);
+
     }
 
     @Test
     public void 인덱스로_유저_삭제() {
 
-        Long idx = (long) 1;
+        Long userIdx = createUserMock("테스트", "테스트 별명", "test@test.com", "1234");
 
-        userRepository.deleteById(idx);
-        Optional<User> user = userRepository.findById(idx);
+        Optional<User> user = userRepository.findById(userIdx);
+
+        assertTrue(user.isPresent());
+
+        userRepository.deleteById(userIdx);
+        user = userRepository.findById(userIdx);
 
         assertTrue(user.isEmpty());
     }
@@ -92,20 +113,16 @@ public class UserRepositoryTest {
     @Test
     public void 유저정보_수정() {
 
-        String name = "가치코딩";
-        String email = "gachicoding@gachicoding.com";
-        String password = "gachi1234";
-        LocalDateTime regdate = LocalDateTime.now();
-        int activated = 1;
-        UserRole role = UserRole.USER;
+        String userName = "가치코딩";
+        String userNick = "가치코코코딩";
+        String userEmail = "gachicoding@gachicoding.com";
+        String userPassword = "gachi1234";
 
         User entity = User.builder()
-                .userName(name)
-                .userEmail(email)
-                .userPassword(password)
-                .userRegdate(regdate)
-                .userActivated(activated)
-                .userRole(role)
+                .userName(userName)
+                .userNick(userNick)
+                .userEmail(userEmail)
+                .userPassword(userPassword)
                 .build();
 
         Long userIdx = userRepository.save(entity).getUserIdx();
@@ -119,10 +136,7 @@ public class UserRepositoryTest {
         String updatePicture = "수정된 사진";
         UserRole updateRole = UserRole.GUEST;
 
-//        user.update(updateName, updateEmail, updatePassword, updateAct, updateRole);
-
         user.update(updateNick, updatePassword, updateAct, updateAuth, updatePicture, updateRole);
-
 
         assertEquals(updateName, userRepository.findById(userIdx).get().getUserName());
         assertEquals(updateNick, userRepository.findById(userIdx).get().getUserNick());

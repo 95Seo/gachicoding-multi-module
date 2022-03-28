@@ -1,16 +1,13 @@
 package org.deco.gachicoding.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.deco.gachicoding.domain.user.Role;
 import org.deco.gachicoding.domain.user.User;
-import org.deco.gachicoding.domain.user.UserRole;
 import org.deco.gachicoding.dto.jwt.JwtRequestDto;
 import org.deco.gachicoding.dto.jwt.JwtResponseDto;
 import org.deco.gachicoding.dto.social.SocialSaveRequestDto;
 import org.deco.gachicoding.dto.user.UserResponseDto;
 import org.deco.gachicoding.dto.user.UserSaveRequestDto;
 import org.deco.gachicoding.dto.user.UserUpdateRequestDto;
-import org.deco.gachicoding.dto.user.UserUpdateResponseDto;
 import org.deco.gachicoding.service.social.SocialService;
 import org.deco.gachicoding.service.user.UserService;
 import org.springframework.web.bind.annotation.*;
@@ -63,7 +60,7 @@ public class RestUserController {
         SocialSaveRequestDto socialSaveRequestDto = socialService.getKakaoUserInfo(accessToken);
 
         // 회원 확인
-        Optional<User> user = userService.getUserByEmail(socialSaveRequestDto.getSocial_id());
+        Optional<User> user = userService.getUserByUserEmail(socialSaveRequestDto.getSocial_id());
 
         JwtRequestDto jwtRequestDto = new JwtRequestDto();
 

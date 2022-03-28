@@ -27,7 +27,7 @@ public class UserSaveRequestDto {
     private String userNick;
 
     @NotNull
-    @Email(message = "올바른 형식의 아이디가 아닙니다.")
+    @Email(message = "올바른 형식의 이메일이 아닙니다.")
     private String userEmail;
 
     @NotNull
