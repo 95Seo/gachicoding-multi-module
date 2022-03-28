@@ -22,7 +22,7 @@ public class Auth {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(length = 36)    // 토큰의 PK 값 현재 DB는 varchar(36) 으로 되어있음. 37을 해야 됨
+    @Column(length = 36)
     private String authToken;
 
     // 일부러 FK 사용 안함

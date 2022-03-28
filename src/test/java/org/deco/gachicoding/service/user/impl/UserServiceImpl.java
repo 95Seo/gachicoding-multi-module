@@ -7,9 +7,9 @@ import org.deco.gachicoding.domain.user.UserRepository;
 import org.deco.gachicoding.domain.utils.auth.Auth;
 import org.deco.gachicoding.dto.jwt.JwtRequestDto;
 import org.deco.gachicoding.dto.jwt.JwtResponseDto;
+import org.deco.gachicoding.service.email.AuthService;
 import org.deco.gachicoding.dto.user.UserSaveRequestDto;
 import org.deco.gachicoding.dto.user.UserUpdateRequestDto;
-import org.deco.gachicoding.service.email.AuthService;
 import org.deco.gachicoding.service.user.UserService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -71,7 +71,6 @@ public class UserServiceImpl implements UserService {
     // 커밋을 앞에서 예외를 잡았기 때문에 문제 없다고 판단, 커밋을 실행한다. 하지만 roll-back only**이 마킹되어 있어 **롤백함.
     // 에러 발생 - 이와 관련해선 좀 딥한 부분인거 같아서 공부를 좀 더 해야할 거 같음 + 트러블 슈팅으로 넣으면 좋을 듯
     // @Transactional 사용도 신중해야 할 필요가 있을 듯
-
 
     @Override
     public Long registerUser(UserSaveRequestDto dto) throws DataIntegrityViolationException {
