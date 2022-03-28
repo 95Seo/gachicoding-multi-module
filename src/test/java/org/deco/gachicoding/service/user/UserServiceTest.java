@@ -1,5 +1,7 @@
 package org.deco.gachicoding.service.user;
 
+import org.deco.gachicoding.dto.jwt.JwtRequestDto;
+import org.deco.gachicoding.dto.jwt.JwtResponseDto;
 import org.deco.gachicoding.dto.user.UserSaveRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -88,9 +90,9 @@ public class UserServiceTest {
     void duplicationEmailJoin() {
         // Given
         UserSaveRequestDto userSaveRequestDto1 = new UserSaveRequestDto();
-        userSaveRequestDto1.setEmail("ay9564@naver.com");
-        userSaveRequestDto1.setName("서영준");
-        userSaveRequestDto1.setPassword("ay789456");
+//        userSaveRequestDto1.setEmail("ay9564@naver.com");
+//        userSaveRequestDto1.setName("서영준");
+//        userSaveRequestDto1.setPassword("ay789456");
 
         // When
 //        Long exception_code = userService.registerUser(userSaveRequestDto1);
@@ -105,9 +107,9 @@ public class UserServiceTest {
     void notEmailFormatIdJoinUser() {
         // Given
         UserSaveRequestDto userSaveRequestDto1 = new UserSaveRequestDto();
-        userSaveRequestDto1.setEmail("ay9564naver.com");
-        userSaveRequestDto1.setName("서영준");
-        userSaveRequestDto1.setPassword("ay789456");
+//        userSaveRequestDto1.setEmail("ay9564naver.com");
+//        userSaveRequestDto1.setName("서영준");
+//        userSaveRequestDto1.setPassword("ay789456");
 
         // When
 //        Long exception_code = userService.registerUser(userSaveRequestDto1);

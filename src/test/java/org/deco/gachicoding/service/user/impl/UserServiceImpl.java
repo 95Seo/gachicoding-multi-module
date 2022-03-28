@@ -11,6 +11,7 @@ import org.deco.gachicoding.dto.user.UserSaveRequestDto;
 import org.deco.gachicoding.dto.user.UserUpdateRequestDto;
 import org.deco.gachicoding.service.email.AuthService;
 import org.deco.gachicoding.service.user.UserService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,13 +32,10 @@ public class UserServiceImpl implements UserService {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
 
-    //    @Transactional
+    @Transactional
     @Override
-    public boolean existDuplicateEmail(String email) {
-
-        boolean isDuplicate = getUserByEmail(email).isPresent();
-
-        return isDuplicate;
+    public boolean isDuplicateEmail(String userEmail) {
+        return getUserByEmail(userEmail).isPresent();
     }
 
     @Transactional
@@ -76,7 +74,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public Long registerUser(UserSaveRequestDto dto) {
+    public Long registerUser(UserSaveRequestDto dto) throws DataIntegrityViolationException {
 
         /*
         dto.encryptPassword(passwordEncoder);
@@ -98,13 +96,19 @@ public class UserServiceImpl implements UserService {
 
 
         // 이메일 중복 체크
+        String registerEmail = dto.getUserEmail();
+
+        if (isDuplicateEmail(registerEmail))
+            throw new DataIntegrityViolationException("중복된 이메일 입니다.");
+
         // 비밀번호 변조
+
         // 유저 저장
+        Long userIdx = userRepository.save(dto.toEntity()).getUserIdx();
         // 유저 이메일로 인증 메일 보내기
 
-        Long idx = userRepository.save(dto.toEntity()).getUserIdx();
+        return userIdx;
 
-        return idx;
     }
 
 
@@ -142,7 +146,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(idx)
                 .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다. 회원 번호 = " + idx));
 
-//        user.update();
+        user.update(user.getUserNick(), user.getUserPassword(), user.getUserActivated(), user.isUserAuth(), user.getUserPicture(), user.getUserRole());
 
         return idx;
     }

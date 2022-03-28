@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface UserService {
 
     // 이메일 중복 체크
-    boolean existDuplicateEmail(String email);
+    boolean isDuplicateEmail(String email);
 
     Optional<User> getUserByEmail(String email);
 
