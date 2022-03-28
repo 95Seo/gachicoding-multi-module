@@ -40,16 +40,16 @@ DROP TABLE IF EXISTS `gachicoding`.`gachi_trend` RESTRICT;
 -- 유저
 CREATE TABLE `gachicoding`.`user`
 (
-    `user_idx`       BIGINT(20) UNSIGNED NOT NULL COMMENT '유저번호',                    -- 유저번호
-    `user_name`      VARCHAR(255)        NOT NULL COMMENT '유저이름',                    -- 유저이름
-    `user_nick`      VARCHAR(255)        NOT NULL COMMENT '유저별명',                    -- 유저별명
-    `user_email`     VARCHAR(255)        NOT NULL COMMENT '이메일',                     -- 이메일
-    `user_password`  VARCHAR(255)        NOT NULL COMMENT '비밀번호',                    -- 비밀번호
-    `user_regdate`   DATETIME            NOT NULL DEFAULT now() COMMENT '생성일자',      -- 생성일자
-    `user_activated` BOOLEAN             NOT NULL DEFAULT true COMMENT '활성상태',       -- 활성상태
-    `user_role`      VARCHAR(15)         NOT NULL DEFAULT 'ROLE_GUEST' COMMENT '권한', -- 권한
-    `user_auth`      BOOLEAN             NOT NULL DEFAULT false COMMENT '인증여부',      -- 인증여부
-    `user_picture`   TEXT                NULL COMMENT '사진'                           -- 사진
+    `user_idx`       BIGINT(20) UNSIGNED NOT NULL COMMENT '유저번호',               -- 유저번호
+    `user_name`      VARCHAR(255)        NOT NULL COMMENT '유저이름',               -- 유저이름
+    `user_nick`      VARCHAR(255)        NOT NULL COMMENT '유저별명',               -- 유저별명
+    `user_email`     VARCHAR(255)        NOT NULL COMMENT '이메일',                -- 이메일
+    `user_password`  VARCHAR(255)        NOT NULL COMMENT '비밀번호',               -- 비밀번호
+    `user_regdate`   DATETIME            NOT NULL DEFAULT now() COMMENT '생성일자', -- 생성일자
+    `user_activated` BOOLEAN             NOT NULL DEFAULT true COMMENT '활성상태',  -- 활성상태
+    `user_role`      VARCHAR(15)         NOT NULL DEFAULT 'GUEST' COMMENT '권한', -- 권한
+    `user_auth`      BOOLEAN             NOT NULL DEFAULT false COMMENT '인증여부', -- 인증여부
+    `user_picture`   TEXT                NULL COMMENT '사진'                      -- 사진
 )
     COMMENT '유저';
 
@@ -73,7 +73,7 @@ ALTER TABLE `gachicoding`.`user`
 -- 인증
 CREATE TABLE `gachicoding`.`auth`
 (
-    `auth_token`   VARCHAR(36)  NOT NULL COMMENT '토큰',                 -- 토큰
+    `auth_token`   VARCHAR(37)  NOT NULL COMMENT '토큰',                 -- 토큰
     `auth_email`   VARCHAR(255) NOT NULL COMMENT '이메일',                -- 이메일
     `auth_regdate` DATETIME     NOT NULL DEFAULT now() COMMENT '생성일시', -- 생성일시
     `auth_expdate` DATETIME     NOT NULL COMMENT '만료일시'                -- 만료일시
