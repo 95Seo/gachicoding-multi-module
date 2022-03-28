@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import org.deco.gachicoding.domain.user.Role;
 import org.deco.gachicoding.domain.user.User;
+import org.deco.gachicoding.domain.user.UserRole;
 
 import java.util.Map;
 
@@ -24,11 +25,11 @@ public class OAuthAttributes {
         this.picture = picture;
     }
 
-    public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes){
+    public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
         return ofGoogle(userNameAttributeName, attributes);
     }
 
-    private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes){
+    private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
         return OAuthAttributes.builder()
                 .name((String) attributes.get("name"))
                 .email((String) attributes.get("email"))
@@ -38,11 +39,12 @@ public class OAuthAttributes {
                 .build();
     }
 
-    public User toEntity(){
+    public User toEntity() {
         return User.builder()
-                .name(name)
-                .email(email)
-                .role(Role.USER)
+
+                .userName(name)
+                .userEmail(email)
+                .userRole(UserRole.USER)
                 .build();
     }
 }

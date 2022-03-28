@@ -33,18 +33,18 @@ public class UserRepositoryTest {
     @Test
     public void 이메일로_유저조회() {
 
-        Optional<User> user = userRepository.findByEmail("test@test.com");
+        Optional<User> user = userRepository.findByUserEmail("test@test.com");
 
-        assertEquals("test@test.com", user.get().getEmail());
-        assertEquals("테스트", user.get().getName());
+        assertEquals("test@test.com", user.get().getUserEmail());
+        assertEquals("테스트", user.get().getUserName());
     }
 
     @Test
     public void 인덱스로_유저조회() {
         Long idx = (long) 1;
         Optional<User> user = userRepository.findById(idx);
-        assertEquals("test@test.com", user.get().getEmail());
-        assertEquals("테스트", user.get().getName());
+        assertEquals("test@test.com", user.get().getUserEmail());
+        assertEquals("테스트", user.get().getUserName());
     }
 
     @Test
@@ -58,12 +58,12 @@ public class UserRepositoryTest {
         UserRole role = UserRole.USER;
 
         User entity = User.builder()
-                .name(name)
-                .email(email)
-                .password(password)
-                .regdate(regdate)
-                .activated(activated)
-                .role(role)
+                .userName(name)
+                .userEmail(email)
+                .userPassword(password)
+                .userRegdate(regdate)
+                .userActivated(activated)
+                .userRole(role)
                 .build();
 
 
@@ -100,29 +100,36 @@ public class UserRepositoryTest {
         UserRole role = UserRole.USER;
 
         User entity = User.builder()
-                .name(name)
-                .email(email)
-                .password(password)
-                .regdate(regdate)
-                .activated(activated)
-                .role(role)
+                .userName(name)
+                .userEmail(email)
+                .userPassword(password)
+                .userRegdate(regdate)
+                .userActivated(activated)
+                .userRole(role)
                 .build();
 
-        Long idx = userRepository.save(entity).getIdx();
-        User user = userRepository.findById(idx).get();
+        Long userIdx = userRepository.save(entity).getUserIdx();
+        User user = userRepository.findById(userIdx).get();
 
         String updateName = "수정된 이름";
-        String updateEmail = "수정된 메일";
+        String updateNick = "수정된 별명";
         String updatePassword = "수정된 비밀번호";
+        boolean updateAuth = true;
         int updateAct = 0;
+        String updatePicture = "수정된 사진";
         UserRole updateRole = UserRole.GUEST;
 
-        user.update(updateName, updateEmail, updatePassword, updateAct, updateRole);
+//        user.update(updateName, updateEmail, updatePassword, updateAct, updateRole);
 
-        assertEquals(updateName, userRepository.findById(idx).get().getName());
-        assertEquals(updateEmail, userRepository.findById(idx).get().getEmail());
-        assertEquals(updatePassword, userRepository.findById(idx).get().getPassword());
-        assertEquals(updateAct, userRepository.findById(idx).get().getActivated());
-        assertEquals(updateRole, userRepository.findById(idx).get().getRole());
+        user.update(updateNick, updatePassword, updateAct, updateAuth, updatePicture, updateRole);
+
+
+        assertEquals(updateName, userRepository.findById(userIdx).get().getUserName());
+        assertEquals(updateNick, userRepository.findById(userIdx).get().getUserNick());
+        assertEquals(updatePassword, userRepository.findById(userIdx).get().getUserPassword());
+        assertEquals(updateAuth, userRepository.findById(userIdx).get().isUserAuth());
+        assertEquals(updateAct, userRepository.findById(userIdx).get().getUserActivated());
+        assertEquals(updatePicture, userRepository.findById(userIdx).get().getUserPicture());
+        assertEquals(updateRole, userRepository.findById(userIdx).get().getUserRole());
     }
 }
