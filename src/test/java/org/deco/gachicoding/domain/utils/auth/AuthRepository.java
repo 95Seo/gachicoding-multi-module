@@ -2,7 +2,6 @@ package org.deco.gachicoding.domain.utils.auth;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface AuthRepository extends JpaRepository<Auth, String> {

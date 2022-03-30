@@ -1,6 +1,5 @@
 package org.deco.gachicoding.domain.user;
 
-import org.deco.gachicoding.dto.user.UserSaveRequestDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

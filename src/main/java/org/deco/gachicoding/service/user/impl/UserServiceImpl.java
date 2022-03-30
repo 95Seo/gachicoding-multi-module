@@ -1,16 +1,11 @@
 package org.deco.gachicoding.service.user.impl;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
 import org.deco.gachicoding.config.jwt.JwtTokenProvider;
-import org.deco.gachicoding.domain.social.SocialAuth;
-import org.deco.gachicoding.domain.social.SocialAuthRepository;
 import org.deco.gachicoding.domain.user.*;
 import org.deco.gachicoding.domain.utils.email.EmailToken;
 import org.deco.gachicoding.dto.jwt.JwtRequestDto;
 import org.deco.gachicoding.dto.jwt.JwtResponseDto;
-import org.deco.gachicoding.dto.social.SocialSaveRequestDto;
 import org.deco.gachicoding.dto.user.*;
 import org.deco.gachicoding.service.user.UserService;
 import org.deco.gachicoding.service.email.EmailTokenService;
@@ -22,9 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Optional;
 
 @Service

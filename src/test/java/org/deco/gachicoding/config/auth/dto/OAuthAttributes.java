@@ -2,7 +2,6 @@ package org.deco.gachicoding.config.auth.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.deco.gachicoding.domain.user.Role;
 import org.deco.gachicoding.domain.user.User;
 import org.deco.gachicoding.domain.user.UserRole;
 
