@@ -3,11 +3,6 @@ package org.deco.gachicoding.dto.user;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.deco.gachicoding.domain.user.UserRole;
-
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import java.time.LocalDateTime;
 
 @Setter
 @Getter

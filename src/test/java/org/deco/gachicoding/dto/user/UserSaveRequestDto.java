@@ -6,14 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.deco.gachicoding.domain.user.User;
-import org.deco.gachicoding.domain.user.UserRole;
 import org.springframework.lang.Nullable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter

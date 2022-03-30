@@ -1,10 +1,8 @@
 package org.deco.gachicoding.service.user;
 
-import org.deco.gachicoding.domain.social.SocialAuth;
 import org.deco.gachicoding.domain.user.User;
 import org.deco.gachicoding.dto.jwt.JwtRequestDto;
 import org.deco.gachicoding.dto.jwt.JwtResponseDto;
-import org.deco.gachicoding.dto.social.SocialSaveRequestDto;
 import org.deco.gachicoding.dto.user.*;
 import org.springframework.stereotype.Service;
 
