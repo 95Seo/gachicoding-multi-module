@@ -44,12 +44,15 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUserEmail(userEmail);
     }
 
+    // 물어보기
     @Transactional
     @Override
     public JwtResponseDto login(JwtRequestDto request) {
+
         try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+
             return createJwtToken(authentication);
             // BadCredentialsException - 스프링 시큐리티 에서 아이디 또는 비밀번호가 틀렸을 경우 나오는 예외
         } catch (BadCredentialsException e) {
@@ -93,7 +96,6 @@ public class UserServiceImpl implements UserService {
 
     }
 
-
     // 클릭
     // 토큰 검색
     // 만료 일시 조회 와 지금 시각 비교
@@ -128,7 +130,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(idx)
                 .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다. 회원 번호 = " + idx));
 
-        user.update(user.getUserNick(), user.getUserPassword(), user.getUserActivated(), user.isUserAuth(), user.getUserPicture(), user.getUserRole());
+        user.update(user.getUserName(), user.getUserNick(), user.getUserPassword(), user.getUserActivated(), user.isUserAuth(), user.getUserPicture(), user.getUserRole());
 
         return idx;
     }

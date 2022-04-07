@@ -27,15 +27,32 @@ public class UserServiceTest2 {
     @Autowired
     UserRepository userRepository;
 
+    private Long userIdx;
+
+    private Long createUserMock(String userName, String userNick, String userEmail, String userPassword) {
+
+        UserSaveRequestDto dto = UserSaveRequestDto.builder()
+                .userName(userName)
+                .userNick(userNick)
+                .userEmail(userEmail)
+                .userPassword(userPassword)
+                .build();
+
+        return userService.registerUser(dto);
+    }
+
     @AfterEach
     void cleanUp() {
-        userRepository.deleteAll();
+        if (userIdx != null) {
+            userRepository.deleteById(this.userIdx);
+        }
+        userIdx = null;
     }
 
     @Test
     void 이메일로_유저정보_가져오기_해당유저존재() {
 
-        createUserMock("테스트", "테스트별명", "test@test.com", "1234");
+        userIdx = createUserMock("테스트", "테스트별명", "test@test.com", "1234");
 
         Optional<User> user = userService.getUserByUserEmail("test@test.com");
         assertTrue(user.isPresent());
@@ -48,11 +65,10 @@ public class UserServiceTest2 {
         assertTrue(user.isEmpty());
     }
 
-
     @Test
     void 중복이메일_존재() {
 
-        createUserMock("테스트", "테스트별명", "test@test.com", "1234");
+        userIdx = createUserMock("테스트", "테스트별명", "test@test.com", "1234");
         assertTrue(userService.isDuplicateEmail("test@test.com"));
     }
 
@@ -65,41 +81,32 @@ public class UserServiceTest2 {
     @Test
     void 회원가입_성공() {
 
-        createUserMock("테스트", "테스트별명", "test@test.com", "1234");
+        userIdx = createUserMock("테스트", "테스트별명", "test@test.com", "1234");
 
         Optional<User> user = userService.getUserByUserEmail("test@test.com");
 
         assertEquals("테스트", user.get().getUserName());
         assertEquals("테스트별명", user.get().getUserNick());
         assertEquals("test@test.com", user.get().getUserEmail());
-        assertEquals("1234", user.get().getUserPassword());
     }
 
     @Test
     void 회원가입_실패_이메일_중복인_경우() {
 
         // 회원가입
-        createUserMock("테스트", "테스트별명", "test@test.com", "1234");
+        userIdx = createUserMock("테스트", "테스트별명", "test@test.com", "1234");
 
         // 중복된 이메일로 회원가입 할 경우 예외발생하는지 체크
         assertThrows(DataIntegrityViolationException.class, () -> {
-
             // 이미 등록된 이메일로 한번 더 회원가입
             createUserMock("테스트", "테스트별명", "test@test.com", "1234");
         });
 
     }
 
-    private Long createUserMock(String userName, String userNick, String userEmail, String userPassword) {
+    @Test
+    void 로그인_성공(){
 
-        UserSaveRequestDto dto = UserSaveRequestDto.builder()
-                .userName(userName)
-                .userNick(userNick)
-                .userEmail(userEmail)
-                .userPassword(userPassword)
-                .build();
-
-        return userService.registerUser(dto);
     }
 
 }
