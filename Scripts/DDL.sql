@@ -111,12 +111,13 @@ ALTER TABLE `gachicoding`.`social`
 -- 공지사항
 CREATE TABLE `gachicoding`.`notice`
 (
-    `not_idx`     BIGINT(21) UNSIGNED NOT NULL COMMENT '공지사항번호', -- 공지사항번호
-    `user_idx`    BIGINT(20) UNSIGNED NOT NULL COMMENT '작성자번호',  -- 작성자번호
-    `not_title`   VARCHAR(255)        NOT NULL COMMENT '제목',     -- 제목
-    `not_content` TEXT                NOT NULL COMMENT '본문',     -- 본문
-    `not_pin`     BOOLEAN             NOT NULL COMMENT '고정',     -- 고정
-    `not_regdate` DATETIME            NOT NULL COMMENT '작성일'     -- 작성일
+    `not_idx`       BIGINT(21) UNSIGNED NOT NULL COMMENT '공지사항번호',            -- 공지사항번호
+    `user_idx`      BIGINT(20) UNSIGNED NOT NULL COMMENT '작성자번호',             -- 작성자번호
+    `not_title`     VARCHAR(255)        NOT NULL COMMENT '제목',                -- 제목
+    `not_content`   TEXT                NOT NULL COMMENT '본문',                -- 본문
+    `not_pin`       BOOLEAN             NOT NULL COMMENT '고정',                -- 고정
+    `not_regdate`   DATETIME            NOT NULL DEFAULT now() COMMENT '작성일', -- 작성일
+    `not_activated` BOOLEAN             NOT NULL DEFAULT true COMMENT '활성상태'  -- 활성상태
 )
     COMMENT '공지사항';
 
@@ -126,6 +127,9 @@ ALTER TABLE `gachicoding`.`notice`
         PRIMARY KEY (
                      `not_idx` -- 공지사항번호
             );
+
+ALTER TABLE `gachicoding`.`notice`
+    MODIFY COLUMN `not_idx` BIGINT(21) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '공지사항번호';
 
 -- 태그
 CREATE TABLE `gachicoding`.`tag`
