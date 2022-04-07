@@ -52,7 +52,8 @@ public class User {
         return this;
     }
 
-    public User update(String userNick, String userPassword, int userActivated, boolean userAuth, String userPicture, UserRole userRole) {
+    public User update(String userName, String userNick, String userPassword, int userActivated, boolean userAuth, String userPicture, UserRole userRole) {
+        this.userName = userName;
         this.userNick = userNick;
         this.userPassword = userPassword;
         this.userActivated = userActivated;

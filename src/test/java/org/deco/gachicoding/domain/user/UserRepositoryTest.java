@@ -78,6 +78,11 @@ public class UserRepositoryTest {
         String userEmail = "gachicoding@gachicoding.com";
         String userPassword = "gachi1234";
 
+//        String userName = "가치코딩";
+//        String userNick = "공지사항 테스트 별명";
+//        String userEmail = "notice@test.com";
+//        String userPassword = "gachi1234";
+
         User entity = User.builder()
                 .userName(userName)
                 .userNick(userNick)
@@ -85,12 +90,10 @@ public class UserRepositoryTest {
                 .userPassword(userPassword)
                 .build();
 
-
         Long userIdx = userRepository.save(entity).getUserIdx();
         User user = userRepository.findById(userIdx).get();
 
         assertEquals(entity, user);
-
     }
 
     @Test
@@ -111,19 +114,14 @@ public class UserRepositoryTest {
     @Test
     public void 유저정보_수정() {
 
+        // 유니크 키 칼럼은 수정이 안됨.
         String userName = "가치코딩";
         String userNick = "가치코코코딩";
         String userEmail = "gachicoding@gachicoding.com";
         String userPassword = "gachi1234";
 
-        User entity = User.builder()
-                .userName(userName)
-                .userNick(userNick)
-                .userEmail(userEmail)
-                .userPassword(userPassword)
-                .build();
+        Long userIdx = createUserMock(userName, userNick, userEmail, userPassword);
 
-        Long userIdx = userRepository.save(entity).getUserIdx();
         User user = userRepository.findById(userIdx).get();
 
         String updateName = "수정된 이름";
@@ -134,14 +132,12 @@ public class UserRepositoryTest {
         String updatePicture = "수정된 사진";
         UserRole updateRole = UserRole.GUEST;
 
-        user.update(updateNick, updatePassword, updateAct, updateAuth, updatePicture, updateRole);
+        User testUser = user.update(updateName, updateNick, updatePassword, updateAct, updateAuth, updatePicture, updateRole);
 
-        assertEquals(updateName, userRepository.findById(userIdx).get().getUserName());
-        assertEquals(updateNick, userRepository.findById(userIdx).get().getUserNick());
-        assertEquals(updatePassword, userRepository.findById(userIdx).get().getUserPassword());
-        assertEquals(updateAuth, userRepository.findById(userIdx).get().isUserAuth());
-        assertEquals(updateAct, userRepository.findById(userIdx).get().getUserActivated());
-        assertEquals(updatePicture, userRepository.findById(userIdx).get().getUserPicture());
-        assertEquals(updateRole, userRepository.findById(userIdx).get().getUserRole());
+        Optional<User> updateUser = userRepository.findById(userIdx);
+
+        assertEquals(testUser, updateUser.get());
+//        assertNotEquals(user, updateUser.get());
+
     }
 }
