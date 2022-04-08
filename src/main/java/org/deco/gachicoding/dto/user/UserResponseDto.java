@@ -13,22 +13,28 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class UserResponseDto {
 
-    private Long idx;
-    private String name;
-    private String email;
-    private String password;
-    private LocalDateTime regdate;
-    private int activated;
-    private Role role;
+    private Long userIdx;
+    private String userName;
+    private String userNick;
+    private String userEmail;
+    private String userPassword;
+    private String userPicture;
+    private LocalDateTime userRegdate;
+    private boolean userActivated;
+    private boolean userAuth;
+    private Role userRole;
 
     public UserResponseDto(User user) {
-        this.idx = user.getIdx();
-        this.name = user.getName();
-        this.email = user.getEmail();
-        this.password = user.getPassword();
-        this.regdate = user.getRegdate();
-        this.activated = user.getActivated();
-        this.role = user.getRole();
+        this.userIdx = user.getUserIdx();
+        this.userName = user.getUserName();
+        this.userNick = user.getUserNick();
+        this.userEmail = user.getUserEmail();
+        this.userPassword = user.getUserPassword();
+        this.userPicture = user.getUserPicture();
+        this.userRegdate = user.getUserRegdate();
+        this.userActivated = user.isUserActivated();
+        this.userAuth = user.isUserAuth();
+        this.userRole = user.getUserRole();
     }
 
 }

@@ -17,31 +17,37 @@ import javax.validation.constraints.Email;
 @NoArgsConstructor
 public class UserSaveRequestDto {
 
-    private String name;
+    private String userName;
+    private String userNick;
     @Nullable
     @Email(message = "올바른 형식의 아이디가 아닙니다.")
-    private String email;
-    private String password;
-    private Role role;
+    private String userEmail;
+    private String userPassword;
+    private String userPicture;
+    private Role userRole;
 
     @Builder
-    public UserSaveRequestDto(String name, String email, String password, Role role) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.role = role;
+    public UserSaveRequestDto(String userName, String userEmail, String userPassword, String userNick, String userPicture, Role userRole) {
+        this.userName = userName;
+        this.userEmail = userEmail;
+        this.userPassword = userPassword;
+        this.userNick = userNick;
+        this.userPicture = userPicture;
+        this.userRole = userRole;
     }
 
     public User toEntity(){
         return User.builder()
-                .name(name)
-                .email(email)
-                .password(password)
-                .role(role)
+                .userName(userName)
+                .userEmail(userEmail)
+                .userPassword(userPassword)
+                .userNick(userNick)
+                .userPicture(userPicture)
+                .userRole(userRole)
                 .build();
     }
 
     public void encryptPassword(PasswordEncoder passwordEncoder) {
-        password = passwordEncoder.encode(password);
+        userPassword = passwordEncoder.encode(userPassword);
     }
 }
