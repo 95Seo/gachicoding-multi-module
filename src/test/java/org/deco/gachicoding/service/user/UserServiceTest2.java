@@ -1,7 +1,5 @@
 package org.deco.gachicoding.service.user;
 
-import org.deco.gachicoding.domain.user.User;
-import org.deco.gachicoding.domain.user.UserRepository;
 import org.deco.gachicoding.dto.user.UserSaveRequestDto;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
