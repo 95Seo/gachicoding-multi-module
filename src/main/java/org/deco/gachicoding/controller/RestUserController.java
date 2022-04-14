@@ -58,11 +58,11 @@ public class RestUserController {
         SocialSaveRequestDto socialSaveRequestDto = socialService.getKakaoUserInfo(accessToken);
 
         // 회원 확인
-        Optional<User> user = userService.getUserByEmail(socialSaveRequestDto.getSocial_id());
+        Optional<User> user = userService.getUserByEmail(socialSaveRequestDto.getSocialId());
 
         JwtRequestDto jwtRequestDto = new JwtRequestDto();
 
-        jwtRequestDto.setEmail(socialSaveRequestDto.getSocial_id());
+        jwtRequestDto.setEmail(socialSaveRequestDto.getSocialId());
 
         // 카카오 소셜 인증이 없으면
         if(socialService.getSocialTypeAndEmail(socialSaveRequestDto).isEmpty()) {
@@ -71,10 +71,12 @@ public class RestUserController {
             if (user.isEmpty()) {
                 // 유저 회원 가입
                 UserSaveRequestDto userSaveRequestDto = UserSaveRequestDto.builder()
-                                                        .name(socialSaveRequestDto.getName())
-                                                        .email(socialSaveRequestDto.getSocial_id())
-                                                        .password("a123456789a")    // -> 정해야함 암호화된 문자열을 쓰든, 비밀번호 확인 못하게 고정된 키 값을 만들어 두든
-                                                        .role(Role.USER)
+                                                        .userName(socialSaveRequestDto.getUserName())
+                                                        .userEmail(socialSaveRequestDto.getSocialId())
+                                                        .userPassword("a123456789a")    // -> 정해야함 암호화된 문자열을 쓰든, 비밀번호 확인 못하게 고정된 키 값을 만들어 두든
+                                                        .userNick(socialSaveRequestDto.getUserName())   // -> 따로 닉네임을 받든(이쪽이 좋을듯 -> 그럼 null값으로 닉네임 넣어두고 업데이트 하는 형태로 가야할 듯), 초기 닉네임을 이름으로 하든
+                                                        .userPicture("userPicture")     // -> 프로필 사진, 수정해야됨
+                                                        .userRole(Role.USER)
                                                         .build();
 
                 idx = userService.registerUser(userSaveRequestDto);
@@ -83,20 +85,20 @@ public class RestUserController {
 
                 System.out.println("신규 유저 소셜 회원 가입 + 로그인 입니다.");
             } else {
-                idx = user.get().getIdx();
+                idx = user.get().getUserIdx();
 
-                jwtRequestDto.setPassword(user.get().getPassword());
+                jwtRequestDto.setPassword(user.get().getUserPassword());
 
                 System.out.println("기존 유저 소셜 인증 + 로그인 입니다.");
             }
             // 유저 idx를 몰랐기 때문에 지금 set
-            socialSaveRequestDto.setUser_idx(idx);
+            socialSaveRequestDto.setUserIdx(idx);
             socialService.registerSocial(socialSaveRequestDto);
         } 
         // 있으면 로그인 처리(이메일 만을 사용해야함)
         else {
-            jwtRequestDto.setPassword(user.get().getPassword());
-            System.out.println("기존 회원 로그인 입니다." + user.get().getPassword());
+            jwtRequestDto.setPassword(user.get().getUserPassword());
+            System.out.println("기존 회원 로그인 입니다." + user.get().getUserPassword());
         }
 
         // => email - socialId, password - 유저 검색을 통해 알아야함

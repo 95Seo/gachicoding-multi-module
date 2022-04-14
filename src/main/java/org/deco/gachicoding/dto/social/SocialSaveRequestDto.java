@@ -11,24 +11,24 @@ import org.deco.gachicoding.domain.social.SocialAuth;
 @NoArgsConstructor
 public class SocialSaveRequestDto {
 
-    private Long user_idx;
-    private String social_id;
-    private String name;
-    private String type;
+    private Long userIdx;
+    private String socialId;
+    private String userName;
+    private String socialType;
 
     @Builder
-    public SocialSaveRequestDto(Long user_idx, String social_id, String name, String type) {
-        this.user_idx = user_idx;
-        this.social_id = social_id;
-        this.name = name;
-        this.type = type;
+    public SocialSaveRequestDto(Long userIdx, String socialId, String userName, String socialType) {
+        this.userIdx = userIdx;
+        this.socialId = socialId;
+        this.userName = userName;
+        this.socialType = socialType;
     }
 
     public SocialAuth toEntity(){
         return SocialAuth.builder()
-                .user_idx(user_idx)
-                .social_id(social_id)
-                .type(type)
+                .userIdx(userIdx)
+                .socialId(socialId)
+                .socialType(socialType)
                 .build();
     }
 }

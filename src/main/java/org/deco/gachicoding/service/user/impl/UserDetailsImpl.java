@@ -18,7 +18,7 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // 추후 Enum 클래스로 수정
-        Role role = user.getRole();
+        Role role = user.getUserRole();
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(ROLE_PREFIX + role.toString());
         Collection<GrantedAuthority> authorities = new ArrayList<>(); //List인 이유 : 여러개의 권한을 가질 수 있다
         authorities.add(authority);
@@ -27,16 +27,16 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return user.getUserPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getName();
+        return user.getUserName();
     }
 
     public String getUserEmail() {
-        return user.getEmail();
+        return user.getUserEmail();
     }
 
     @Override

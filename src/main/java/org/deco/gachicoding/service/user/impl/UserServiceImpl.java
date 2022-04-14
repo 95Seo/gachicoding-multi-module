@@ -70,17 +70,17 @@ public class UserServiceImpl implements UserService {
 
         dto.encryptPassword(passwordEncoder);
 
-        if(getUserByEmail(dto.getEmail()).isEmpty()) {
+        if(getUserByEmail(dto.getUserEmail()).isEmpty()) {
             System.out.println("User Save 수행");
 
-            Long idx = userRepository.save(dto.toEntity()).getIdx();
+            Long idx = userRepository.save(dto.toEntity()).getUserIdx();
 
             // 이메일 인증 기능 분리 필요
-            confirmationTokenService.createEmailConfirmationToken(dto.getEmail());
+            confirmationTokenService.createEmailConfirmationToken(dto.getUserEmail());
 
             return idx;
         } else {
-            System.out.println(dto.getEmail() + " : User Save 실패\n 중복된 아이디 입니다.");
+            System.out.println(dto.getUserEmail() + " : User Save 실패\n 중복된 아이디 입니다.");
             return Long.valueOf(-100);
         }
     }
@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(idx)
                 .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다. 회원 번호 = " + idx));
 
-        user.update(dto.getName(), dto.getEmail(), dto.getPassword(), dto.getActivated(), dto.getRole());
+        user.update(dto.getUserPassword(), dto.getUserNick(), dto.getUserPicture(), dto.getUserRole());
 
         return idx;
     }

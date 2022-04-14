@@ -10,17 +10,15 @@ import org.deco.gachicoding.domain.user.Role;
 @NoArgsConstructor
 public class UserUpdateResponseDto {
 
-    private String name;
-    private String email;
-    private String password;
-    private int activated;
-    private Role role;
+    private String userPassword;
+    private String userNick;
+    private String userPicture;
+    private Role userRole;
 
-    public UserUpdateResponseDto(String name, String email, String password, int activated, Role role) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.activated = activated;
-        this.role = role;
+    public UserUpdateResponseDto(String userPassword, String userNick, String userPicture, boolean userActivated, Role userRole) {
+        this.userPassword = userPassword;
+        this.userNick = userNick;
+        this.userPicture = userPicture;
+        this.userRole = userRole;
     }
 }
