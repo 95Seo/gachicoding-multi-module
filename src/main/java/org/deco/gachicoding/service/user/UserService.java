@@ -11,9 +11,9 @@ import java.util.Optional;
 @Service
 public interface UserService {
 
-    Optional<User> getUserByEmail(String email);
+    boolean isDuplicateEmail(String email);
 
-    UserResponseDto getUser(Long idx);
+    Optional<User> getUserByUserEmail(String email);
 
     JwtResponseDto login(JwtRequestDto request);
 
@@ -21,7 +21,7 @@ public interface UserService {
 
     void confirmEmail(String token);
 
-    Long updateUser(Long idx, UserUpdateResponseDto dto);
+    Long updateUser(Long idx, UserUpdateRequestDto dto);
 
     Long deleteUser(Long idx);
 

@@ -2,7 +2,7 @@ package org.deco.gachicoding.config.auth.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.deco.gachicoding.domain.user.Role;
+import org.deco.gachicoding.domain.user.UserRole;
 import org.deco.gachicoding.domain.user.User;
 
 import java.util.Map;
@@ -40,9 +40,9 @@ public class OAuthAttributes {
 
     public User toEntity(){
         return User.builder()
-                .name(name)
-                .email(email)
-                .role(Role.USER)
+                .userName(name)
+                .userEmail(email)
+                .userRole(UserRole.USER)
                 .build();
     }
 }

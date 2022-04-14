@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.deco.gachicoding.domain.social.SocialAuth;
+import org.deco.gachicoding.domain.social.Social;
 
 @Getter
 @Setter
@@ -24,8 +24,8 @@ public class SocialSaveRequestDto {
         this.type = type;
     }
 
-    public SocialAuth toEntity(){
-        return SocialAuth.builder()
+    public Social toEntity(){
+        return Social.builder()
                 .user_idx(user_idx)
                 .social_id(social_id)
                 .type(type)

@@ -1,4 +1,4 @@
-package org.deco.gachicoding.service.email;
+package org.deco.gachicoding.service.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.deco.gachicoding.domain.utils.auth.Auth;
@@ -37,18 +37,11 @@ public class AuthService {
 
     }
 
-    /**
-     * 유효한 토큰 가져오기
-     * @param confirmationTokenId
-     * @return
-     */
-
     public Auth getTokenByAuthEmail(String authEmail){
         Optional<Auth> auth = authRepository.findByAuthEmail(authEmail);
         return auth.orElseThrow(() -> new IllegalArgumentException("유효하지 않은 토큰입니다."));
     }
 
-//
     public Auth findByIdExpirationDateAfterAndExpired(String confirmationTokenId) {
 //        Optional<ConfirmationToken> confirmationToken = confirmationTokenRepository.findByIdAndExpirationDateAfterAndExpired(confirmationTokenId, LocalDateTime.now(), false);
 //        return confirmationToken.orElseThrow(()-> new IllegalArgumentException("기한이 만료된 토큰입니다."));

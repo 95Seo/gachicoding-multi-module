@@ -3,7 +3,7 @@ package org.deco.gachicoding.config.auth;
 import lombok.AllArgsConstructor;
 import org.deco.gachicoding.config.jwt.JwtAuthenticationFilter;
 import org.deco.gachicoding.config.jwt.JwtTokenProvider;
-import org.deco.gachicoding.domain.user.Role;
+import org.deco.gachicoding.domain.user.UserRole;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -56,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // login 없이 접근 허용 하는 url
                 .antMatchers("/api/user/**").permitAll()
                 // '/admin'의 경우 ADMIN 권한이 있는 사용자만 접근이 가능
-                .antMatchers("/admin").hasRole(Role.ADMIN.name()) // Role의 User의 이름, 즉 "ROLE_USER"
+                .antMatchers("/admin").hasRole(UserRole.ADMIN.name()) // Role의 User의 이름, 즉 "ROLE_USER"
                 // 그 외 모든 요청은 인증과정 필요
                 .anyRequest().authenticated()
                 .and()

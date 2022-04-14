@@ -3,8 +3,8 @@ package org.deco.gachicoding.service.social.impl;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
-import org.deco.gachicoding.domain.social.SocialAuth;
-import org.deco.gachicoding.domain.social.SocialAuthRepository;
+import org.deco.gachicoding.domain.social.Social;
+import org.deco.gachicoding.domain.social.SocialRepository;
 import org.deco.gachicoding.dto.social.SocialSaveRequestDto;
 import org.deco.gachicoding.service.social.SocialService;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SocialServiceImpl implements SocialService {
 
-    private final SocialAuthRepository socialAuthRepository;
+    private final SocialRepository socialAuthRepository;
 
     // 소셜 인증 테이블 input
     @Override
@@ -31,8 +31,8 @@ public class SocialServiceImpl implements SocialService {
     }
 
     // SocialType(kakao, google, github) SocialId(Email)로 회원 검색
-    public Optional<SocialAuth> getSocialTypeAndEmail(SocialSaveRequestDto dto) {
-        return socialAuthRepository.findByTypeAndSocialId(dto.getSocialType(), dto.getSocialId());
+    public Optional<Social> getSocialTypeAndEmail(SocialSaveRequestDto dto) {
+        return socialAuthRepository.findBySocialTypeAndSocialId(dto.getSocialType(), dto.getSocialId());
     }
 
     // 카카오 엑세스 토큰 가져오기

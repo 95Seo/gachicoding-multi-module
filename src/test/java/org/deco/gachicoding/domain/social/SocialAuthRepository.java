@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface SocialAuthRepository extends JpaRepository<SocialAuth, Long> {
-    public Optional<SocialAuth> findByTypeAndSocialId(String type, String socialId);
+public interface SocialAuthRepository extends JpaRepository<Social, Long> {
+    public Optional<Social> findByTypeAndSocialId(String type, String socialId);
 }

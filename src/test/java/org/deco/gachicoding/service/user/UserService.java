@@ -1,6 +1,5 @@
 package org.deco.gachicoding.service.user;
 
-
 import org.deco.gachicoding.domain.user.User;
 import org.deco.gachicoding.dto.jwt.JwtRequestDto;
 import org.deco.gachicoding.dto.jwt.JwtResponseDto;
@@ -13,7 +12,6 @@ import java.util.Optional;
 @Service
 public interface UserService {
 
-    // 이메일 중복 체크
     boolean isDuplicateEmail(String email);
 
     Optional<User> getUserByUserEmail(String email);
@@ -27,6 +25,5 @@ public interface UserService {
     Long updateUser(Long idx, UserUpdateRequestDto dto);
 
     Long deleteUser(Long idx);
-
 
 }

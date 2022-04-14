@@ -1,7 +1,6 @@
 package org.deco.gachicoding.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.deco.gachicoding.domain.user.Role;
 import org.deco.gachicoding.domain.user.User;
 import org.deco.gachicoding.dto.jwt.JwtRequestDto;
 import org.deco.gachicoding.dto.jwt.JwtResponseDto;
@@ -28,18 +27,13 @@ public class RestUserController {
         return userService.login(dto);
     }
 
-    @GetMapping("/user/{idx}")
-    public UserResponseDto getUser(@PathVariable Long idx){
-        return userService.getUser(idx);
-    }
-
     @PostMapping("/user")
     public Long registerUser(@Valid @RequestBody UserSaveRequestDto dto) {
         return userService.registerUser(dto);
     }
 
     @PutMapping("/user/{idx}")
-    public Long updateUser(@PathVariable Long idx,@RequestBody UserUpdateResponseDto dto){
+    public Long updateUser(@PathVariable Long idx,@RequestBody UserUpdateRequestDto dto){
         return userService.updateUser(idx, dto);
     }
 
@@ -58,7 +52,7 @@ public class RestUserController {
         SocialSaveRequestDto socialSaveRequestDto = socialService.getKakaoUserInfo(accessToken);
 
         // 회원 확인
-        Optional<User> user = userService.getUserByEmail(socialSaveRequestDto.getSocialId());
+        Optional<User> user = userService.getUserByUserEmail(socialSaveRequestDto.getSocialId());
 
         JwtRequestDto jwtRequestDto = new JwtRequestDto();
 
@@ -76,7 +70,7 @@ public class RestUserController {
                                                         .userPassword("a123456789a")    // -> 정해야함 암호화된 문자열을 쓰든, 비밀번호 확인 못하게 고정된 키 값을 만들어 두든
                                                         .userNick(socialSaveRequestDto.getUserName())   // -> 따로 닉네임을 받든(이쪽이 좋을듯 -> 그럼 null값으로 닉네임 넣어두고 업데이트 하는 형태로 가야할 듯), 초기 닉네임을 이름으로 하든
                                                         .userPicture("userPicture")     // -> 프로필 사진, 수정해야됨
-                                                        .userRole(Role.USER)
+//                                                        .userRole(UserRole.USER)
                                                         .build();
 
                 idx = userService.registerUser(userSaveRequestDto);
