@@ -1,1 +1,44 @@
 rootProject.name = 'gachicoding'
+
+def file(dir, name) {
+    return file("${dir.absolutePath}/${name}")
+}
+
+def GRADLE_TEXT = """
+
+dependencies {
+
+
+}
+
+"""
+
+["api", "presentation", "core", "infrastructure"].forEach(moduleName->{
+    def moduleDir = file(rootDir, moduleName);
+    if(!moduleDir.exists()) {
+        moduleDir.mkdirs()
+    }
+
+    moduleDir.eachFile {subProjectDir ->
+        def buildFile = file(subProjectDir, "build.gradle");
+        if(!buildFile.exists()) {
+            buildFile.text = GRADLE_TEXT
+        }
+
+        def projectName = ":${moduleName}-${subProjectDir.name}"
+        include projectName
+        project(projectName).projectDir = subProjectDir
+
+        [
+                "src/main/java/org/deco/gachicoding/${moduleName}/${subProjectDir.name}",
+                "src/main/resources",
+                "src/test/java/org/deco/gachicoding/${moduleName}/${subProjectDir.name}",
+                "src/test/resources",
+        ].forEach(src->{
+            def srcDir = file(subProjectDir, src);
+            if(!srcDir.exists()) {
+                srcDir.mkdirs();
+            }
+        })
+    }
+})

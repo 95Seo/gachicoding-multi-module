@@ -1,63 +1,80 @@
-plugins {
-    id 'org.springframework.boot' version '2.6.4'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'java'
+buildscript {
+    ext {
+        spring = "org.springframework"
+        boot = "${spring}.boot"
+        bootVersion = "2.6.4"
+        lombok = "org.projectlombok:lombok"
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "$boot:spring-boot-gradle-plugin:$bootVersion"
+    }
+
 }
 
-group = 'org.deco'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+allprojects {
+    group = 'org.deco'
+    version = '0.0.1-SNAPSHOT'
+}
 
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
+subprojects {
+    apply plugin: "java-library"
+    apply plugin : boot
+    apply plugin : "io.spring.dependency-management"
+    sourceCompatibility = '11'
+
+    repositories {
+        mavenCentral()
+    }
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    // 추후 디펜던시를 적소에 맞게 나눌 필요 있음
+    dependencies {
+        implementation "org.slf4j:slf4j-api"
+        compileOnly lombok
+        annotationProcessor lombok
+
+        implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.6.4'
+        implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.6.3'
+        implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client', version: '2.6.4'
+        implementation 'io.jsonwebtoken:jjwt:0.9.1'        // jwt
+
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+        implementation "org.springframework.boot:spring-boot-starter-jdbc"
+
+        runtimeOnly 'mysql:mysql-connector-java'
+
+        //mail
+        implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.6.4'
+        // gson
+        implementation 'com.google.code.gson:gson:2.8.9'
+
+        testImplementation "$boot:spring-boot-starter-test"
+        testCompileOnly 'org.projectlombok:lombok'
+        testAnnotationProcessor 'org.projectlombok:lombok'
+    }
+
+    test {
+        useJUnitPlatform()
     }
 }
 
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-    implementation "org.springframework.boot:spring-boot-starter-jdbc"
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
-    // 롬복
-    implementation 'org.projectlombok:lombok:1.18.20'
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-
-    // 테스트 환경 롬복
-    testAnnotationProcessor('org.projectlombok:lombok')
-
-
-    runtimeOnly 'mysql:mysql-connector-java'
-
-
-
-
-    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.6.4'
-    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.6.4'
-    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.6.3'
-    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-oauth2-client
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client', version: '2.6.4'
-
-    // jwt
-    implementation 'io.jsonwebtoken:jjwt:0.9.1'
-
-    // gson
-    implementation 'com.google.code.gson:gson:2.8.9'
-
-
-}
-
-tasks.named('test') {
-    useJUnitPlatform()
+// server이외에는 main을 구성할 일이 없기 때문에
+// bootJar의 영향으로 빌드가 에러가 남
+// 따라서 server이외에는(모듈이름이 server-로 시작하는 모듈) bootJar를 꺼둠
+rootProject.subprojects {
+    if(!it.name.startsWith("infrastructure-")) {
+        it.tasks["bootJar"].enabled = false
+    }
 }
