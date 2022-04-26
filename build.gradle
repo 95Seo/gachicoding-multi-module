@@ -63,6 +63,16 @@ subprojects {
         testImplementation "$boot:spring-boot-starter-test"
         testCompileOnly 'org.projectlombok:lombok'
         testAnnotationProcessor 'org.projectlombok:lombok'
+
+        // AWS S3
+        implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.202'
+
+        // swagger
+        implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+        implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+
+        // https://mvnrepository.com/artifact/commons-io/commons-io
+        implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
     }
 
     test {

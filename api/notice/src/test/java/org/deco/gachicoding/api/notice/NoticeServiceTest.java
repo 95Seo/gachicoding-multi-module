@@ -35,7 +35,7 @@ public class NoticeServiceTest {
     @BeforeEach
     void before() {
         NoticeSaveRequestDto entity = NoticeSaveRequestDto.builder()
-                .userIdx(Long.valueOf(17))
+                .userIdx(Long.valueOf(1))
                 .notTitle(notTitle)
                 .notContent(notContent)
                 .notPin(notPin)
@@ -108,7 +108,7 @@ public class NoticeServiceTest {
 
         Optional<Notice> notice = noticeService.findById(noticeIdx);
 
-        assertEquals(notice.get().getNotActivate(), false);
+        assertEquals(notice.get().getNotActivated(), false);
     }
 
     @Test
@@ -117,7 +117,7 @@ public class NoticeServiceTest {
 
         Optional<Notice> notice = noticeService.findById(noticeIdx);
 
-        assertEquals(notice.get().getNotActivate(), true);
+        assertEquals(notice.get().getNotActivated(), true);
     }
 
     @Test

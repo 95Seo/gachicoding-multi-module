@@ -1,5 +1,6 @@
 package org.deco.gachicoding.presentation.user;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.deco.gachicoding.api.user.dto.*;
 import org.deco.gachicoding.api.user.service.SocialService;
@@ -19,36 +20,43 @@ public class RestUserController {
 
     private final SocialService socialService;
 
+    @ApiOperation(value = "로그인")
     @PostMapping("/user/login")
     public JwtResponseDto login(@RequestBody JwtRequestDto dto) throws Exception {
         return userService.login(dto);
     }
 
+    @ApiOperation(value = "회원 가입")
     @PostMapping("/user")
     public Long registerUser(@Valid @RequestBody UserSaveRequestDto dto) {
         return userService.registerUser(dto);
     }
 
+    @ApiOperation(value = "회원정보 수정")
     @PutMapping("/user/update/{idx}")
     public UserResponseDto updateUser(@PathVariable Long idx,@RequestBody UserUpdateRequestDto dto){
         return userService.updateUser(idx, dto);
     }
 
+    @ApiOperation(value = "회원 비활성화")
     @PutMapping("/user/disable/{idx}")
     public void disableUser(@PathVariable Long idx){
         userService.disableUser(idx);
     }
 
+    @ApiOperation(value = "회원 활성화")
     @PutMapping("/user/enable/{idx}")
     public void enableUser(@PathVariable Long idx){
         userService.enableUser(idx);
     }
 
+    @ApiOperation(value = "회원 삭제")
     @DeleteMapping("/user/{idx}")
     public void deleteUser(@PathVariable Long idx){ userService.deleteUser(idx);
     }
 
     // 기본적인 흐름만 구현 리팩토링 필요
+    @ApiOperation(value = "카카오 로그인")
     @GetMapping("/user/kakaoLogin")
     public JwtResponseDto kakaoUserLogin(String code) throws Exception {
         System.out.println("kakaoCode" + code);

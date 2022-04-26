@@ -33,8 +33,8 @@ public class UserResponseDto {
         this.userPassword = user.getUserPassword();
         this.userPicture = user.getUserPicture();
         this.userRegdate = user.getUserRegdate();
-        this.userActivated = user.isUserActivated();
-        this.userAuth = user.isUserAuth();
+        this.userActivated = user.getUserActivated();
+        this.userAuth = user.getUserAuth();
         this.userRole = user.getUserRole();
     }
 

@@ -6,12 +6,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
 @DynamicInsert
+@DynamicUpdate
 @Entity(name = "notice")
 @NoArgsConstructor
 public class Notice {
@@ -24,7 +26,7 @@ public class Notice {
     private String notContent;
     private int notViews;
     private Boolean notPin;
-    private Boolean notActivate;
+    private Boolean notActivated;
     private LocalDateTime notRegdate;
 
     // FetchType.EAGER 즉시 로딩
@@ -39,13 +41,13 @@ public class Notice {
     private User user;
 
     @Builder
-    public Notice(User user, String notTitle, String notContent, int notViews, Boolean notPin, Boolean notActivate, LocalDateTime notRegdate) {
+    public Notice(User user, String notTitle, String notContent, int notViews, Boolean notPin, Boolean notActivated, LocalDateTime notRegdate) {
         this.user = user;
         this.notTitle = notTitle;
         this.notContent = notContent;
         this.notViews = notViews;
         this.notPin = notPin;
-        this.notActivate = notActivate;
+        this.notActivated = notActivated;
         this.notRegdate = notRegdate;
     }
 
@@ -54,22 +56,19 @@ public class Notice {
     }
 
     public Notice update(String notTitle, String notContent, Boolean notPin) {
-        if(notTitle != null)
-            this.notTitle = notTitle;
-        if(notContent != null)
-            this.notContent = notContent;
-        if(notPin != null)
-            this.notPin = notPin;
+        this.notTitle = notTitle;
+        this.notContent = notContent;
+        this.notPin = notPin;
         return this;
     }
 
     public Notice disableNotice() {
-        this.notActivate = false;
+        this.notActivated = false;
         return this;
     }
 
     public Notice enableNotice() {
-        this.notActivate = true;
+        this.notActivated = true;
         return this;
     }
 }

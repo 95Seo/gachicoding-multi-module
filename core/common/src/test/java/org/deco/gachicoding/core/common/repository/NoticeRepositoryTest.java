@@ -22,7 +22,9 @@ public class NoticeRepositoryTest {
     @Autowired
     NoticeRepository noticeRepository;
 
-    private Long createNoticeMock(Long userIdx, String notTitle, String notContent, Boolean notPin, Boolean notActivate) {
+    private Long createNoticeMock(String notTitle, String notContent, Boolean notPin, Boolean notActivated) {
+        Long userIdx = Long.valueOf(1);
+
         User user = User.builder()
                 .userIdx(userIdx)
                 .build();
@@ -32,7 +34,7 @@ public class NoticeRepositoryTest {
                 .notTitle(notTitle)
                 .notContent(notContent)
                 .notPin(notPin)
-                .notActivate(notActivate)
+                .notActivated(notActivated)
                 .build();
 
         return noticeRepository.save(entity).getNotIdx();
@@ -44,7 +46,7 @@ public class NoticeRepositoryTest {
         String notContent = "공지사항 테스트 내용";
         Boolean notPin = false;
         Boolean notActivated = true;
-        Long noticeIdx = createNoticeMock(Long.valueOf(17), notTitle, notContent, notPin, notActivated);
+        Long noticeIdx = createNoticeMock(notTitle, notContent, notPin, notActivated);
 
         Optional<Notice> notice = noticeRepository.findById(noticeIdx);
         assertEquals("공지사항 테스트 제목", notice.get().getNotTitle());
@@ -53,17 +55,17 @@ public class NoticeRepositoryTest {
 
     @Test
     public void 공지사항_목록_조회() {
-        String notTitle = "공지사항 목록 테스트 제목";
+        String notTitle = "공지사항 목록 테스트 제목 고양이";
         String notContent = "공지사항 목록 테스트 내용";
         Boolean notPin = false;
         Boolean notActivated = true;
         for(int i = 0; i < 10; i++) {
-            createNoticeMock( Long.valueOf(17), notTitle, notContent, notPin, notActivated);
+            createNoticeMock(notTitle, notContent, notPin, notActivated);
         }
 
-        String keyword = "목록 테스트";
+        String keyword = "고양이";
 
-        Page<Notice> notice = noticeRepository.findByNotContentContainingIgnoreCaseAndNotActivateTrueOrNotTitleContainingIgnoreCaseAndNotActivateTrueOrderByNotIdxDesc(keyword, keyword, PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "notIdx")));
+        Page<Notice> notice = noticeRepository.findByNotContentContainingIgnoreCaseAndNotActivatedTrueOrNotTitleContainingIgnoreCaseAndNotActivatedTrueOrderByNotIdxDesc(keyword, keyword, PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "notIdx")));
 
         // NumberOfElements 요청 페이지에서 조회 된 데이터의 갯수
         assertEquals(10, notice.getTotalElements());
@@ -75,7 +77,7 @@ public class NoticeRepositoryTest {
         String notContent = "공지사항 테스트 내용";
         Boolean notPin = false;
         Boolean notActivated = true;
-        Long noticeIdx = createNoticeMock( Long.valueOf(17), notTitle, notContent, notPin, notActivated);
+        Long noticeIdx = createNoticeMock(notTitle, notContent, notPin, notActivated);
 
         Optional<Notice> notice = noticeRepository.findById(noticeIdx);
 
@@ -94,7 +96,7 @@ public class NoticeRepositoryTest {
         String notContent = "공지사항 테스트 내용 강아지 병아리";
         Boolean notPin = false;
         Boolean notActivated = true;
-        Long noticeIdx = createNoticeMock( Long.valueOf(17), notTitle, notContent, notPin, notActivated);
+        Long noticeIdx = createNoticeMock(notTitle, notContent, notPin, notActivated);
 
         Optional<Notice> notice = noticeRepository.findById(noticeIdx);
 
@@ -102,16 +104,14 @@ public class NoticeRepositoryTest {
 
         String toFindKeyword = "고양이";
 
-        Page<Notice> search_notice = noticeRepository.findByNotContentContainingIgnoreCaseAndNotActivateTrueOrNotTitleContainingIgnoreCaseAndNotActivateTrueOrderByNotIdxDesc(toFindKeyword, toFindKeyword, PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "notIdx")));
+        Page<Notice> search_notice = noticeRepository.findByNotContentContainingIgnoreCaseAndNotActivatedTrueOrNotTitleContainingIgnoreCaseAndNotActivatedTrueOrderByNotIdxDesc(toFindKeyword, toFindKeyword, PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "notIdx")));
 
         for (Notice n : search_notice) {
-            System.out.println("nIdx : " + n.getNotIdx());
-            System.out.println("nTitle : " + n.getNotTitle());
-            System.out.println("nContent : " + n.getNotContent());
+            assertEquals(n.getNotTitle(),notTitle);
+            assertEquals(n.getNotContent(),notContent);
+            assertEquals(n.getNotPin(),notPin);
+            assertEquals(n.getNotActivated(),notActivated);
         }
-
-        assertEquals(search_notice.getContent().get(0).getNotTitle(),notTitle);
-        assertEquals(search_notice.getContent().get(0).getNotContent(),notContent);
     }
 
 }

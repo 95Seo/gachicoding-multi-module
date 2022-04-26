@@ -3,6 +3,7 @@ package org.deco.gachicoding.core.common.domain;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Getter
 @DynamicInsert
+@DynamicUpdate
 @Entity
 @NoArgsConstructor
 @Table(name = "user")
@@ -26,8 +28,8 @@ public class User {
     private String userPassword;
     private String userPicture;
     private LocalDateTime userRegdate;
-    private boolean userActivated;
-    private boolean userAuth;
+    private Boolean userActivated;
+    private Boolean userAuth;
 
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
@@ -37,7 +39,7 @@ public class User {
     private List<Notice> notices;
 
     @Builder
-    public User(Long userIdx, String userName, String userNick, String userEmail, String userPassword, String userPicture, LocalDateTime userRegdate, boolean userActivated, boolean userAuth, UserRole userRole) {
+    public User(Long userIdx, String userName, String userNick, String userEmail, String userPassword, String userPicture, LocalDateTime userRegdate, Boolean userActivated, Boolean userAuth, UserRole userRole) {
         this.userIdx = userIdx;
         this.userName = userName;
         this.userNick = userNick;
@@ -58,14 +60,10 @@ public class User {
     }
 
     public User update(String userNick, String userPassword, UserRole userRole, String userPicture) {
-        if(userNick != null)
-            this.userNick = userNick;
-        if(userPassword != null)
-            this.userPassword = userPassword;
-        if(userRole != null)
-            this.userRole = userRole;
-        if(userPicture != null)
-            this.userPicture = userPicture;
+        this.userNick = userNick;
+        this.userPassword = userPassword;
+        this.userRole = userRole;
+        this.userPicture = userPicture;
         return this;
     }
 
